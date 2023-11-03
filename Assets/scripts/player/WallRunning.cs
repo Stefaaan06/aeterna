@@ -32,9 +32,6 @@ public class WallRunning : MonoBehaviour
 
     private bool _wallLeft = false;
     private bool _wallRight = false;
-    
-    private bool _jumpLeft = false;
-    private bool _jumpRight = false;
 
     private RaycastHit _leftWallHit;
     private RaycastHit _rightWallHit;
@@ -44,8 +41,8 @@ public class WallRunning : MonoBehaviour
     public LayerMask whatIsWall;
     public LayerMask whatIsGround;
     public bool isWallRunning = false;
-    public bool isWallJumping = false;
 
+    public bool _canWallJump;
 
     void Start()
     {
@@ -63,17 +60,13 @@ public class WallRunning : MonoBehaviour
         _wallLeft = Physics.Raycast(_pos, -_orientation, out _leftWallHit, wallDistance, whatIsWall);
         if(_wallLeft) return;
         _wallRight = Physics.Raycast(_pos, _orientation, out _rightWallHit, wallDistance, whatIsWall);
-        if(_wallRight) return;
-        _jumpLeft = Physics.Raycast(_pos, -_orientation, out _leftWallHit, wallDistance, whatIsGround);
-        if(_jumpLeft) return;
-        _jumpRight = Physics.Raycast(_pos, _orientation, out _rightWallHit, wallDistance, whatIsGround);
     }
 
     private void Update()
     {
         if (_playerMovement.grounded)
         {
-            isWallJumping = false;
+            _canWallJump = true;
             StopWallRun();
             return;
         }
@@ -87,33 +80,6 @@ public class WallRunning : MonoBehaviour
         else
         {
             StopWallRun();
-        }
-        
-        
-        if (_jumpLeft || _jumpRight)
-        {
-            isWallJumping = true;
-            wallJump();
-        }
-    }
-
-    void wallJump()
-    {
-        //If player wants to jump of wall
-        if (Input.GetKeyDown(KeyCode.Space) && !_playerMovement.grounded)
-        {
-            if (_jumpLeft)
-            {
-                //jumps of wall 
-                Vector3 wallRunJumpDirection = transform.up + _leftWallHit.normal;
-                rb.AddForce(wallRunJumpDirection * normalJumpForce * 100, ForceMode.Force);
-            }
-            else if (_jumpRight)
-            {
-                //jumps of wall
-                Vector3 wallRunJumpDirection = transform.up + _rightWallHit.normal;
-                rb.AddForce(wallRunJumpDirection * normalJumpForce * 100, ForceMode.Force);
-            }
         }
     }
     
