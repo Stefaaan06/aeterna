@@ -23,13 +23,13 @@ public class scalingGun : MonoBehaviour
     
     void Update()
     {
-        if (Input.GetKey(KeyCode.E))
-        {
+        if (Input.GetButton("Fire1"))
+        { 
             foreach (scalableObject scalable in scalableObjects)
             {
                 scalable.ScaleUp(25, false);
             }
-        }else if (Input.GetKey(KeyCode.Q))
+        }else if (Input.GetButton("Fire2"))
         {
             foreach (scalableObject scalable in scalableObjects)
             {
