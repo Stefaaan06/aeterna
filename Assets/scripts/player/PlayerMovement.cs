@@ -169,6 +169,7 @@ public class PlayerMovement : MonoBehaviour {
     
     public bool extraGravity = true;
     public float extraGravityStrength = 10f;
+    public float maxRbSpeed = 50;
     private void Movement() {
         if(!canMove) return;
         //Extra gravity
@@ -185,6 +186,12 @@ public class PlayerMovement : MonoBehaviour {
         CounterMovement(x, y, mag);
         //Set max speed
         float maxSpeed = this.maxSpeed;
+        Debug.Log(rb.velocity.magnitude);
+        if (rb.velocity.magnitude > maxRbSpeed)
+        {
+            Debug.Log("CHANGE: "+rb.velocity.normalized * maxRbSpeed);
+            rb.velocity = rb.velocity.normalized * maxRbSpeed;
+        }
         
        // If sliding down a ramp, add force down so player stays grounded and also builds speed
         if (crouching && grounded && _readyToJump) {
@@ -200,6 +207,11 @@ public class PlayerMovement : MonoBehaviour {
         
         //Some multipliers
         float multiplier = 1f, multiplierV = 1f;
+        
+        
+        /*
+         * Essentially obsolete. No changes are made to movement speed
+         */
         
         // Movement in air
         if (!grounded) {
