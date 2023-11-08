@@ -443,11 +443,15 @@
                 float4 paper = tex2D(_PaperTex, i.uv);
                 float col = tex2D(_MainTex, i.uv).r;
 
-                
-                return col >= 1.0f ? paper : ink;
+                // Check if the color from the main texture is black (near zero)
+                if (col < 0.01) {
+                    return float4(0, 0, 0, 1); // Maintain pure black
+                } else {
+                    return col >= 1.0f ? paper : ink; // Apply ink or paper texture
+                }
             }
 
             ENDCG
         }
-    }
+    } 
 }

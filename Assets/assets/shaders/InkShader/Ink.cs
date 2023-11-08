@@ -5,6 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(Camera))]
 public class Ink : MonoBehaviour {
 
+    [Header("Ink")]
     public Shader inkShader;
     public Texture paperTexture;
     public Texture inkTexture;
@@ -41,7 +42,7 @@ public class Ink : MonoBehaviour {
     public float stippleSize = 1.0f;
     
     private Material inkMaterial;
-
+    
     void OnEnable() {
         if (inkMaterial == null) {
             inkMaterial = new Material(inkShader);
@@ -123,5 +124,6 @@ public class Ink : MonoBehaviour {
         RenderTexture.ReleaseTemporary(comboSource);
 
         Graphics.Blit(comboSource, destination, inkMaterial, 12);
+
      }
 }
