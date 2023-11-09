@@ -6,6 +6,7 @@ using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Serialization;
+using System.Reflection;
 
 /// <summary>
 /// Handles the duplication of the Rendered objects found in the RepeatingArea.cs script
@@ -16,6 +17,7 @@ using UnityEngine.Serialization;
 public class RepeatingGrid : MonoBehaviour
 { 
     [SerializeField]private Vector3 repeatingTimes = new Vector3(1, 1, 1);
+    [SerializeField] private Vector3 fullRepeatingTimes = new Vector3(1, 1, 1);
     [SerializeField]private RepeatingArea repeatingArea;
     
     /// <summary>
@@ -29,67 +31,99 @@ public class RepeatingGrid : MonoBehaviour
 
         GameObject duplicateObjectParent = new GameObject("duplicateObjectParent");
         
+        
         // Iterate through the grid cells
-        for (int x = -(int)repeatingTimes.x - 1; x < (int)repeatingTimes.x; x++)
+        for (int x = -(int)repeatingTimes.x; x <= (int)repeatingTimes.x; x++)
         {
             GameObject duplicateObjectColumn = new GameObject("duplicateObject: " + x);
             duplicateObjectColumn.transform.parent = duplicateObjectParent.transform;
             
-            for (int y = -(int)repeatingTimes.y - 1; y < (int)repeatingTimes.y; y++)
+            for (int y = -(int)repeatingTimes.y; y <= (int)repeatingTimes.y; y++)
             {
                 GameObject duplicateObjectRow = new GameObject("duplicateObject: " + x + ";" + y);
                 duplicateObjectRow.transform.parent = duplicateObjectColumn.transform;
                 
-                for (int z = -(int)repeatingTimes.z - 1; z < (int)repeatingTimes.z; z++)
+                for (int z = -(int)repeatingTimes.z; z <= (int)repeatingTimes.z; z++)
                 {
-                    GameObject duplicateObject = new GameObject("duplicateObject: " + x + ";" + y + ";" + z);
-                    duplicateObject.transform.parent = duplicateObjectRow.transform;
-                    
                     // Skip the middle cell
-                    if (x == -1 && y == -1 && z == -1)
+                    if (x == 0 && y == 0 && z == 0)
                         continue;
 
-                    Vector3 drawPos = new Vector3(
-                        repeatingAreaPosition.x + repeatingArea.size.x * x,
-                        repeatingAreaPosition.y + repeatingArea.size.y * y,
-                        repeatingAreaPosition.z + repeatingArea.size.z * z
-                    );
-
-                    // Iterate through renderers and duplicate them for the cube
-                    foreach (Renderer renderer in repeatingArea.allRenderers)
-                    {
-                        MeshFilter meshFilter = renderer.GetComponent<MeshFilter>();
-
-                        if (meshFilter != null)
-                        {
-                            GameObject newObj = new GameObject("newObject");
-                            newObj.transform.parent = duplicateObject.transform;
-                            
-                            MeshFilter newMeshFilter = newObj.AddComponent<MeshFilter>();
-                            MeshRenderer newRenderer = newObj.AddComponent<MeshRenderer>();
-
-                            newMeshFilter.sharedMesh = meshFilter.sharedMesh;
-                            newRenderer.sharedMaterials = renderer.sharedMaterials;
-
-
-                            newRenderer.shadowCastingMode = ShadowCastingMode.Off;
-                            newRenderer.receiveShadows = false;
-
-                            //set location, rotation & scale
-                            newRenderer.transform.localRotation = renderer.transform.localRotation;
-                            newRenderer.transform.localScale = renderer.transform.localScale;
-
-                            //calculations to find the right position to place the new renderer
-                            Vector3 relativePosition = renderer.transform.position - repeatingAreaPosition;
-                            Vector3 gridCenter = drawPos + repeatingArea.size;
-                            newRenderer.transform.position = gridCenter + relativePosition;
-                        }
-                    }
+                    CopyRenderers(repeatingArea, duplicateObjectRow, repeatingAreaPosition, x, y, z);
                 }
             }
         }
     }
+    private void CopyRenderers(RepeatingArea sourceArea, GameObject duplicateObjectRow, Vector3 repeatingAreaPosition, int x, int y, int z)
+    {
+    foreach (Renderer renderer in sourceArea.allRenderers)
+    {
+        if (Mathf.Abs(x) <= fullRepeatingTimes.x && Mathf.Abs(y) <= fullRepeatingTimes.y && Mathf.Abs(z) <= fullRepeatingTimes.z && (x != 0 || y != 0 || z != 0))
+        {
+            CopyEverything(renderer.gameObject, repeatingAreaPosition, x, y, z, duplicateObjectRow);
+            continue;
+        }
+        
+        GameObject duplicateObject = new GameObject("duplicateObject: " + x + ";" + y + ";" + z);
+        duplicateObject.transform.parent = duplicateObjectRow.transform;
+        
+        MeshFilter meshFilter = renderer.GetComponent<MeshFilter>();
 
+        if (meshFilter != null)
+        {
+            GameObject newObj = new GameObject("newObject");
+            newObj.transform.parent = duplicateObject.transform;
+
+            MeshFilter newMeshFilter = newObj.AddComponent<MeshFilter>();
+            MeshRenderer newRenderer = newObj.AddComponent<MeshRenderer>();
+
+            newMeshFilter.sharedMesh = meshFilter.sharedMesh;
+            newRenderer.sharedMaterials = renderer.sharedMaterials;
+
+            newRenderer.shadowCastingMode = ShadowCastingMode.Off;
+            newRenderer.receiveShadows = false;
+
+            // Set location, rotation & scale
+            newRenderer.transform.localRotation = renderer.transform.localRotation;
+            newRenderer.transform.localScale = renderer.transform.localScale;
+
+            // Calculations to find the right position to place the new renderer
+            Vector3 relativePosition = renderer.transform.position - repeatingAreaPosition;
+            Vector3 gridCenter = new Vector3(
+                repeatingAreaPosition.x + repeatingArea.size.x * x,
+                repeatingAreaPosition.y + repeatingArea.size.y * y,
+                repeatingAreaPosition.z + repeatingArea.size.z * z
+            );
+
+            newRenderer.transform.position = gridCenter + relativePosition;
+            
+        }
+    }
+}
+    
+private void CopyEverything(GameObject originalObject, Vector3 repeatingAreaPosition, int x, int y, int z, GameObject duplicateObjectRow)
+{
+    GameObject newGameObject = Instantiate(originalObject);
+    newGameObject.name = "duplicateObject: " + x + ";" + y + ";" + z;
+    newGameObject.transform.parent = duplicateObjectRow.transform;
+    
+    Vector3 relativePosition = originalObject.transform.position - repeatingAreaPosition;
+    Vector3 gridCenter = new Vector3(
+        repeatingAreaPosition.x + repeatingArea.size.x * x,
+        repeatingAreaPosition.y + repeatingArea.size.y * y,
+        repeatingAreaPosition.z + repeatingArea.size.z * z
+    );
+
+    newGameObject.transform.position = gridCenter + relativePosition;
+}
+    
+    
+    
+    
+    
+    
+    
+    
     private void OnDrawGizmos()
     {
         drawGrid(false);
@@ -155,8 +189,10 @@ public class RepeatingGrid : MonoBehaviour
 public class RepeatingGridEditor : Editor
 {
     SerializedProperty repeatingTimes;
+    private SerializedProperty fullRepeatingTimes;
     SerializedProperty repeatingArea;
-
+    
+    
     private GUIStyle tooltipStyle;
 
     private void OnEnable()
@@ -168,6 +204,7 @@ public class RepeatingGridEditor : Editor
 
         repeatingTimes = serializedObject.FindProperty("repeatingTimes");
         repeatingArea = serializedObject.FindProperty("repeatingArea");
+        fullRepeatingTimes = serializedObject.FindProperty("fullRepeatingTimes");
     }
 
     /// <summary>
@@ -180,8 +217,10 @@ public class RepeatingGridEditor : Editor
         GUILayout.Label("RepeatingGridEditor", EditorStyles.boldLabel);
 
         repeatingTimes.vector3Value = EditorGUILayout.Vector3Field(new GUIContent("Repeating Times", "Amount of times to repeat"), repeatingTimes.vector3Value);
+        fullRepeatingTimes.vector3Value = EditorGUILayout.Vector3Field(new GUIContent("Full Repeating Times", "The area in which all components should be copied as well (may be performance heavy)"), fullRepeatingTimes.vector3Value);
         repeatingArea.objectReferenceValue = EditorGUILayout.ObjectField(new GUIContent("Repeating Area", "The RepeatingArea script to use"), repeatingArea.objectReferenceValue, typeof(RepeatingArea), true) as RepeatingArea;
-
+        
+        
         if (GUILayout.Button("Duplicate Renderers"))
         {
             if (repeatingTimes.vector3Value.x > 5 || repeatingTimes.vector3Value.y > 5 || repeatingTimes.vector3Value.z > 5) // Check if repeatingTimes is higher than 5

@@ -21,7 +21,8 @@
         float _Contrast;
         float _StippleSize;
         uint _UsingImage;
-
+        
+        
         struct VertexData {
             float4 vertex : POSITION;
             float2 uv : TEXCOORD0;
@@ -31,6 +32,7 @@
             float2 uv : TEXCOORD0;
             float4 vertex : SV_POSITION;
             float4 screenPosition : TEXCOORD1;
+            float4 color : COLOR;
         };
 
         v2f vp(VertexData v) {
@@ -429,7 +431,7 @@
 
             ENDCG
         }
-
+        
         // Color Pass
         Pass {
             CGPROGRAM
@@ -442,7 +444,7 @@
                 float4 ink = tex2D(_InkTex, i.uv);
                 float4 paper = tex2D(_PaperTex, i.uv);
                 float col = tex2D(_MainTex, i.uv).r;
-
+                
                 // Check if the color from the main texture is black (near zero)
                 if (col < 0.01) {
                     return float4(0, 0, 0, 1); // Maintain pure black

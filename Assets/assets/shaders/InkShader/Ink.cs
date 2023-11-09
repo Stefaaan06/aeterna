@@ -42,7 +42,6 @@ public class Ink : MonoBehaviour {
     public float stippleSize = 1.0f;
     
     private Material inkMaterial;
-    
     void OnEnable() {
         if (inkMaterial == null) {
             inkMaterial = new Material(inkShader);
@@ -67,7 +66,7 @@ public class Ink : MonoBehaviour {
         inkMaterial.SetFloat("_Contrast", luminanceContrast);
         inkMaterial.SetFloat("_StippleSize", stippleSize);
         inkMaterial.SetFloat("_UsingImage", useImage ? 1 : 0);
-
+        
         int width = useImage ? image.width : source.width;
         int height = useImage ? image.height : source.height;
 

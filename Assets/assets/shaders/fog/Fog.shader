@@ -2,9 +2,9 @@ Shader "Hidden/SSFog" {
     Properties {
         _MainTex ("Texture", 2D) = "white" {}
     }
-
+    
     SubShader {
-
+        Tags { "Queue" = "Overlay" }
         Pass {
             CGPROGRAM
             #pragma vertex vp
