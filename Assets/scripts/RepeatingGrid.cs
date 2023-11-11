@@ -58,17 +58,22 @@ public class RepeatingGrid : MonoBehaviour
     {
     foreach (Renderer renderer in sourceArea.allRenderers)
     {
-        if (Mathf.Abs(x) <= fullRepeatingTimes.x && Mathf.Abs(y) <= fullRepeatingTimes.y && Mathf.Abs(z) <= fullRepeatingTimes.z && (x != 0 || y != 0 || z != 0))
+        if (renderer.gameObject.CompareTag("ignoreDuplicate"))continue;
+
+        if (!renderer.gameObject.CompareTag("repeat"))
         {
-            CopyEverything(renderer.gameObject, repeatingAreaPosition, x, y, z, duplicateObjectRow);
-            continue;
+           if (Mathf.Abs(x) <= fullRepeatingTimes.x && Mathf.Abs(y) <= fullRepeatingTimes.y && Mathf.Abs(z) <= fullRepeatingTimes.z && (x != 0 || y != 0 || z != 0))
+           {
+               CopyEverything(renderer.gameObject, repeatingAreaPosition, x, y, z, duplicateObjectRow);
+               continue;
+           } 
         }
         
         GameObject duplicateObject = new GameObject("duplicateObject: " + x + ";" + y + ";" + z);
         duplicateObject.transform.parent = duplicateObjectRow.transform;
         
         MeshFilter meshFilter = renderer.GetComponent<MeshFilter>();
-
+        
         if (meshFilter != null)
         {
             GameObject newObj = new GameObject("newObject");
@@ -96,7 +101,16 @@ public class RepeatingGrid : MonoBehaviour
             );
 
             newRenderer.transform.position = gridCenter + relativePosition;
-            
+
+            if (renderer.gameObject.CompareTag("repeat"))
+            {
+                newObj.gameObject.AddComponent<repeat>();
+                newObj.gameObject.GetComponent<repeat>().setValues(renderer.gameObject, x, y,z, repeatingArea.size);
+            }
+            else
+            {
+                newObj.isStatic = true;
+            }
         }
     }
 }

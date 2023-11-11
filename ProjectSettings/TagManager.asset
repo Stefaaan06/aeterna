@@ -6,6 +6,8 @@ TagManager:
   tags:
   - scaleable
   - player
+  - ignoreDuplicate
+  - repeat
   layers:
   - Default
   - TransparentFX
@@ -16,7 +18,7 @@ TagManager:
   - Player
   - Ground
   - wallrunn
-  - 
+  - pickup
   - 
   - 
   - 

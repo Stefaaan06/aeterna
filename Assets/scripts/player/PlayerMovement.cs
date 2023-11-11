@@ -186,10 +186,8 @@ public class PlayerMovement : MonoBehaviour {
         CounterMovement(x, y, mag);
         //Set max speed
         float maxSpeed = this.maxSpeed;
-        Debug.Log(rb.velocity.magnitude);
         if (rb.velocity.magnitude > maxRbSpeed)
         {
-            Debug.Log("CHANGE: "+rb.velocity.normalized * maxRbSpeed);
             rb.velocity = rb.velocity.normalized * maxRbSpeed;
         }
         
@@ -197,13 +195,7 @@ public class PlayerMovement : MonoBehaviour {
         if (crouching && grounded && _readyToJump) {
            rb.AddForce(Vector3.down * (Time.deltaTime * 1000)); //CHANGES HERE
         }
-
         
-        //If speed is larger than maxspeed, cancel out the input so you don't go over max speed
-        if (x > 0 && xMag > maxSpeed) x = 0;
-        if (x < 0 && xMag < -maxSpeed) x = 0;
-        if (y > 0 && yMag > maxSpeed) y = 0;
-        if (y < 0 && yMag < -maxSpeed) y = 0;
         
         //Some multipliers
         float multiplier = 1f, multiplierV = 1f;
@@ -228,6 +220,12 @@ public class PlayerMovement : MonoBehaviour {
         {
             multiplier = 1f;
             multiplierV = 1f;
+        }
+
+        if (rb.velocity.magnitude > maxSpeed)
+        {
+            multiplier = 0.5f;
+            multiplierV = 0.5f;
         }
 
         if (onSlope)

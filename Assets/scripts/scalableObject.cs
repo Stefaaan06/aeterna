@@ -13,6 +13,9 @@ public class scalableObject : MonoBehaviour
     public bool reverse; // if true, scale down instead of up
 
     private bool _playerContact = false;
+    private bool _otherContact = false;
+    
+    private Rigidbody _otherRb;
     private Rigidbody player;
     private PlayerMovement _playerMovement;
 
@@ -44,6 +47,12 @@ public class scalableObject : MonoBehaviour
         {
             _playerContact = true;
         }
+
+        if (other.gameObject.CompareTag("repeat"))
+        {
+            _otherContact = true;
+            _otherRb = other.gameObject.GetComponent<Rigidbody>();
+        }
     }
 
     private void OnCollisionExit(Collision other)
@@ -51,6 +60,10 @@ public class scalableObject : MonoBehaviour
         if (other.gameObject.CompareTag("player"))
         {
             _playerContact = false;
+        }
+        if (other.gameObject.CompareTag("repeat"))
+        {
+            _otherContact = false;
         }
     }
     
@@ -75,7 +88,15 @@ public class scalableObject : MonoBehaviour
                 _cooldown = true;
                 _playerMovement.canMove = false;
                 _boostCooldownTimer = _boostCooldown;
+            }else if (_otherContact)
+            {
+                // Calculate the relative position vector between the player and the object with this script.
+                Vector3 relativePosition = _otherRb.position - transform.position;
+
+                // Apply the boost force in the direction of the relative position.
+                _otherRb.AddForce(relativePosition.normalized * boostForce, ForceMode.Impulse);
             }
+            
             Vector3 newScale = transform.localScale + scaleSpeed * Time.deltaTime;
             transform.localScale = new Vector3(
                 Mathf.Min(newScale.x, maxScale.x),

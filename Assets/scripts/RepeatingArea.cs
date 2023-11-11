@@ -1,5 +1,7 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -14,14 +16,13 @@ public class RepeatingArea : MonoBehaviour
     public Vector3 size = new Vector3(100,100,100);     //size of the area
     [HideInInspector] public Renderer[] allRenderers;
 
-
     private void Start()
     {
         BoxCollider col = this.AddComponent<BoxCollider>();
         col.isTrigger = true;
         col.size = size;
     }
-
+    
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("player"))
@@ -47,7 +48,31 @@ public class RepeatingArea : MonoBehaviour
             {
                 other.transform.position = new Vector3(other.transform.position.x, other.transform.position.y, other.transform.position.z - size.z);
             }
-        } 
+        }
+        else if (other.CompareTag("repeat"))
+        {
+            Vector3 newSize = size / 2;
+            Vector3 currentPosition = other.transform.position;
+            
+            if (currentPosition.y < transform.position.y - newSize.y)
+            {
+                other.transform.position = new Vector3(other.transform.position.x, other.transform.position.y + size.y, other.transform.position.z);
+            }
+            else if(currentPosition.x < transform.position.x - newSize.x)
+            {
+                other.transform.position = new Vector3(other.transform.position.x + size.x, other.transform.position.y, other.transform.position.z);
+            }else if(currentPosition.x > transform.position.x + newSize.x)
+            {
+                other.transform.position = new Vector3(other.transform.position.x - size.x, other.transform.position.y, other.transform.position.z);
+            }
+            else if(currentPosition.z < transform.position.z - newSize.z)
+            {
+                other.transform.position = new Vector3(other.transform.position.x, other.transform.position.y, other.transform.position.z + size.z);
+            }else if (currentPosition.z > transform.position.z - newSize.z)
+            {
+                other.transform.position = new Vector3(other.transform.position.x, other.transform.position.y, other.transform.position.z - size.z);
+            }
+        }
     }
     
     /// <summary>
