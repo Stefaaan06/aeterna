@@ -15,7 +15,6 @@ public class WallRunning : MonoBehaviour
 
     [Header("Detection")]
     [SerializeField] private float wallDistance = .5f;
-    [SerializeField] private float sphereRadius = .5f;
 
     [Header("Wall Running")]
     [SerializeField] private float wallRunGravity;
@@ -42,7 +41,6 @@ public class WallRunning : MonoBehaviour
     public LayerMask whatIsGround;
     public bool isWallRunning = false;
 
-    public bool _canWallJump;
 
     void Start()
     {
@@ -66,7 +64,6 @@ public class WallRunning : MonoBehaviour
     {
         if (_playerMovement.grounded)
         {
-            _canWallJump = true;
             StopWallRun();
             return;
         }

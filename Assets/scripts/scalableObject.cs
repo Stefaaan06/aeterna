@@ -18,11 +18,13 @@ public class scalableObject : MonoBehaviour
     private Rigidbody _otherRb;
     private Rigidbody player;
     private PlayerMovement _playerMovement;
+    private Collider _col;
 
     private void Start()
     {
         _playerMovement = FindObjectOfType<PlayerMovement>();
         player = FindObjectOfType<PlayerMovement>().GetComponent<Rigidbody>();
+        _col = GetComponent<Collider>();
     }
 
     private readonly int _boostCooldown = 5;
@@ -75,10 +77,11 @@ public class scalableObject : MonoBehaviour
             return;
         }
         
-        if (transform.localScale.x < maxScale.x || transform.localScale.y < maxScale.y || transform.localScale.z < maxScale.z) {
+        if (transform.localScale.x < maxScale.x || transform.localScale.y < maxScale.y || transform.localScale.z < maxScale.z)
+        {
+            _col.enabled = true;
             if (_playerContact && !_cooldown)
             {
-
                 // Calculate the relative position vector between the player and the object with this script.
                 Vector3 relativePosition = player.position - transform.position;
 
@@ -136,6 +139,10 @@ public class scalableObject : MonoBehaviour
                     Mathf.Min(newScale.y, maxScale.y),
                     Mathf.Min(newScale.z, maxScale.z)
                 );
+            }
+            if (this.transform.localScale == new Vector3(0, 0, 0))
+            {
+                _col.enabled = false;
             }
         }
     }

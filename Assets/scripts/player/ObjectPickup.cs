@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 /**
  * Description: Script allowing the Player to pick up Objects
@@ -18,14 +20,14 @@ public class ObjectPickup : MonoBehaviour {
 
     private static GameObject m_heldObj = null;
     private Rigidbody _heldObjRB;
-    public bool _pickedUp;
+    private Vector3 _scale;
+
    
     [Header("Physicis Parameters")]
     [SerializeField] private float pickupRange;
     [SerializeField] private float pickupForce;
+    
 
-    
-    
     float _objMass;
     private void Update(){
         if(Input.GetKeyDown(KeyCode.E)){
@@ -41,45 +43,70 @@ public class ObjectPickup : MonoBehaviour {
         }
         if(m_heldObj == null) return;
         MoveObject();
+
     }
+
+    public void crouch(bool crouch)
+    {
+        if(m_heldObj == null) return;
+        
+        if(crouch){
+            if(m_heldObj.transform.localScale == _scale){
+                m_heldObj.transform.localScale = m_heldObj.transform.localScale * 2;
+                holdArea.transform.localPosition = new Vector3(0, 0, 4.5f);
+            }   
+        }else{
+            m_heldObj.transform.localScale = _scale;
+            holdArea.transform.localPosition = new Vector3(0, 0, 2.5f);
+
+        }
+    }
+    
+
     float _prevAngularDrag;
     private float _prevDrag;
     void PickupObject(GameObject pickObj)
     {
-        _pickedUp = true;
-         m_heldObj = pickObj;
-         _heldObjRB = pickObj.GetComponent<Rigidbody>();
+        
+        m_heldObj = pickObj;
+        _heldObjRB = pickObj.GetComponent<Rigidbody>();
 
-         _prevDrag = _heldObjRB.drag;
-         _prevAngularDrag = _heldObjRB.angularDrag;
+        
+        m_heldObj.tag = "pickedUp";
+        m_heldObj.transform.parent = this.transform;
+        
+        _prevDrag = _heldObjRB.drag;
+        _prevAngularDrag = _heldObjRB.angularDrag;
          
-         _heldObjRB.drag = 2;
-         _heldObjRB.angularDrag = 1;
-         _heldObjRB.useGravity = false;
+        _heldObjRB.drag = 2;
+        _heldObjRB.angularDrag = 1;
+        _heldObjRB.useGravity = false;
+        
+        if(!playerMovement.crouching){
+            _scale = m_heldObj.transform.localScale;
+        }else{
+            _scale = m_heldObj.transform.localScale / 2;
+        }
     }
     
     public void DropObject(){  
         if(m_heldObj == null || _heldObjRB == null) { return; }
-        _pickedUp = false;
+        m_heldObj.tag = "repeat";
+        m_heldObj.transform.parent = null;
+        
         m_heldObj = null;
             
         _heldObjRB.drag = _prevDrag;
         _heldObjRB.angularDrag = _prevAngularDrag;
         _heldObjRB.useGravity = true;
-
+        
+        
         _heldObjRB = null;
     }
 
     public LayerMask ground;
     void MoveObject()
     {
-        
-        if (Vector3.Distance(m_heldObj.transform.position, holdArea.position) > 6f)
-        {
-            DropObject();
-            return;
-        }
-        
         Vector3 moveDirection = (holdArea.position - m_heldObj.transform.position);
         float moveDistance = Vector3.Distance(holdArea.position, m_heldObj.transform.position);
         
@@ -98,8 +125,8 @@ public class ObjectPickup : MonoBehaviour {
             _heldObjRB.AddForce(moveDirection * pickupForce);
             return;
         }
-        
         m_heldObj.transform.position = holdArea.position;
+        
         
         
         if (_heldObjRB.constraints != RigidbodyConstraints.FreezeRotation)

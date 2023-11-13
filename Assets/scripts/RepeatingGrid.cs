@@ -16,9 +16,9 @@ using System.Reflection;
 [Serializable]
 public class RepeatingGrid : MonoBehaviour
 { 
-    [SerializeField]private Vector3 repeatingTimes = new Vector3(1, 1, 1);
+    [SerializeField] private Vector3 repeatingTimes = new Vector3(1, 1, 1);
     [SerializeField] private Vector3 fullRepeatingTimes = new Vector3(1, 1, 1);
-    [SerializeField]private RepeatingArea repeatingArea;
+    [SerializeField] private RepeatingArea repeatingArea;
     
     /// <summary>
     /// Duplicates the Renders found in the RepeatingArea.cs script
@@ -202,23 +202,23 @@ private void CopyEverything(GameObject originalObject, Vector3 repeatingAreaPosi
 [CustomEditor(typeof(RepeatingGrid))]
 public class RepeatingGridEditor : Editor
 {
-    SerializedProperty repeatingTimes;
-    private SerializedProperty fullRepeatingTimes;
-    SerializedProperty repeatingArea;
+    private SerializedProperty _repeatingTimes;
+    private SerializedProperty _fullRepeatingTimes;
+    private SerializedProperty _repeatingArea;
     
     
-    private GUIStyle tooltipStyle;
+    private GUIStyle _tooltipStyle;
 
     private void OnEnable()
     {
         // Create a GUIStyle for tooltips
-        tooltipStyle = new GUIStyle();
-        tooltipStyle.normal.textColor = Color.white;
-        tooltipStyle.wordWrap = true;
+        _tooltipStyle = new GUIStyle();
+        _tooltipStyle.normal.textColor = Color.white;
+        _tooltipStyle.wordWrap = true;
 
-        repeatingTimes = serializedObject.FindProperty("repeatingTimes");
-        repeatingArea = serializedObject.FindProperty("repeatingArea");
-        fullRepeatingTimes = serializedObject.FindProperty("fullRepeatingTimes");
+        _repeatingTimes = serializedObject.FindProperty("repeatingTimes");
+        _repeatingArea = serializedObject.FindProperty("repeatingArea");
+        _fullRepeatingTimes = serializedObject.FindProperty("fullRepeatingTimes");
     }
 
     /// <summary>
@@ -230,14 +230,14 @@ public class RepeatingGridEditor : Editor
 
         GUILayout.Label("RepeatingGridEditor", EditorStyles.boldLabel);
 
-        repeatingTimes.vector3Value = EditorGUILayout.Vector3Field(new GUIContent("Repeating Times", "Amount of times to repeat"), repeatingTimes.vector3Value);
-        fullRepeatingTimes.vector3Value = EditorGUILayout.Vector3Field(new GUIContent("Full Repeating Times", "The area in which all components should be copied as well (may be performance heavy)"), fullRepeatingTimes.vector3Value);
-        repeatingArea.objectReferenceValue = EditorGUILayout.ObjectField(new GUIContent("Repeating Area", "The RepeatingArea script to use"), repeatingArea.objectReferenceValue, typeof(RepeatingArea), true) as RepeatingArea;
+        _repeatingTimes.vector3Value = EditorGUILayout.Vector3Field(new GUIContent("Repeating Times", "Amount of times to repeat"), _repeatingTimes.vector3Value);
+        _fullRepeatingTimes.vector3Value = EditorGUILayout.Vector3Field(new GUIContent("Full Repeating Times", "The area in which all components should be copied as well (may be performance heavy)"), _fullRepeatingTimes.vector3Value);
+        _repeatingArea.objectReferenceValue = EditorGUILayout.ObjectField(new GUIContent("Repeating Area", "The RepeatingArea script to use"), _repeatingArea.objectReferenceValue, typeof(RepeatingArea), true) as RepeatingArea;
         
         
         if (GUILayout.Button("Duplicate Renderers"))
         {
-            if (repeatingTimes.vector3Value.x > 5 || repeatingTimes.vector3Value.y > 5 || repeatingTimes.vector3Value.z > 5) // Check if repeatingTimes is higher than 5
+            if (_repeatingTimes.vector3Value.x > 5 || _repeatingTimes.vector3Value.y > 5 || _repeatingTimes.vector3Value.z > 5) // Check if repeatingTimes is higher than 5
             {
                 if (EditorUtility.DisplayDialog("Warning", "RepeatingTimes is higher than 5. This will cause significant performance issues. Are you sure you want to continue?", "Yes", "No"))
                 {

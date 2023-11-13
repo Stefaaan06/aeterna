@@ -25,31 +25,7 @@ public class RepeatingArea : MonoBehaviour
     
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("player"))
-        {
-            Vector3 newSize = size / 2;
-            Vector3 currentPosition = other.transform.position;
-            
-            if (currentPosition.y < transform.position.y - newSize.y)
-            {
-                other.transform.position = new Vector3(other.transform.position.x, other.transform.position.y + size.y, other.transform.position.z);
-            }
-            else if(currentPosition.x < transform.position.x - newSize.x)
-            {
-                other.transform.position = new Vector3(other.transform.position.x + size.x, other.transform.position.y, other.transform.position.z);
-            }else if(currentPosition.x > transform.position.x + newSize.x)
-            {
-                other.transform.position = new Vector3(other.transform.position.x - size.x, other.transform.position.y, other.transform.position.z);
-            }
-            else if(currentPosition.z < transform.position.z - newSize.z)
-            {
-                other.transform.position = new Vector3(other.transform.position.x, other.transform.position.y, other.transform.position.z + size.z);
-            }else if (currentPosition.z > transform.position.z - newSize.z)
-            {
-                other.transform.position = new Vector3(other.transform.position.x, other.transform.position.y, other.transform.position.z - size.z);
-            }
-        }
-        else if (other.CompareTag("repeat"))
+        if (other.CompareTag("player") || other.CompareTag("repeat"))
         {
             Vector3 newSize = size / 2;
             Vector3 currentPosition = other.transform.position;

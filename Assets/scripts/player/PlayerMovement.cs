@@ -50,7 +50,7 @@ public class PlayerMovement : MonoBehaviour {
     [Header("References")]
     [SerializeField] WallRunning wallRun;
     [SerializeField] GrapplingGun grappling;
-    
+    [SerializeField] private ObjectPickup objectPickup;
 
     void Start()
     {
@@ -127,6 +127,7 @@ public class PlayerMovement : MonoBehaviour {
 
     private void StartCrouch() {
         transform.localScale = _crouchScale;
+        objectPickup.crouch(true);
         transform.position = new Vector3(transform.position.x, transform.position.y - 0.5f, transform.position.z);
         crouching = true;
         if (rb.velocity.magnitude > 0.5f) {
@@ -140,6 +141,7 @@ public class PlayerMovement : MonoBehaviour {
 
     public void StopCrouch() {    
         transform.localScale = playerScale;
+        objectPickup.crouch(false);
         transform.position = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
         crouching = false;
 
