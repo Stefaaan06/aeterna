@@ -11,7 +11,7 @@ public class Fog : MonoBehaviour {
     [Range(0.0f, 1.0f)]
     public float fogDensity;
     
-    [Range(0.0f, 100.0f)]
+    [Range(0.0f, 10000.0f)]
     public float fogOffset;
     
     private Material fogMat;

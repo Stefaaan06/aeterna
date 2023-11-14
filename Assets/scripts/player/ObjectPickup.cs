@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 
@@ -15,15 +17,15 @@ public class ObjectPickup : MonoBehaviour {
     [SerializeField] private Transform cam;
     [SerializeField] private LayerMask pickupLayer;
 
-    [Header("Refferences")]
+    [Header("References")]
     [SerializeField] private PlayerMovement playerMovement;
 
-    private static GameObject m_heldObj = null;
-    private Rigidbody _heldObjRB;
+    private static GameObject _heldObj = null;
+    private Rigidbody _heldObjRb;
     private Vector3 _scale;
 
    
-    [Header("Physicis Parameters")]
+    [Header("Physics Parameters")]
     [SerializeField] private float pickupRange;
     [SerializeField] private float pickupForce;
     
@@ -31,7 +33,7 @@ public class ObjectPickup : MonoBehaviour {
     float _objMass;
     private void Update(){
         if(Input.GetKeyDown(KeyCode.E)){
-            if(m_heldObj == null){    
+            if(_heldObj == null){    
                 RaycastHit hit;
                 //shoots Raycast to find Object within the PickupRange and having the correct layer
                 if(Physics.Raycast(cam.position, cam.forward, out hit, pickupRange, pickupLayer)){
@@ -41,22 +43,22 @@ public class ObjectPickup : MonoBehaviour {
                 DropObject();
             }
         }
-        if(m_heldObj == null) return;
+        if(_heldObj == null) return;
+        rotateObject();
         MoveObject();
-
     }
 
     public void crouch(bool crouch)
     {
-        if(m_heldObj == null) return;
+        if(_heldObj == null) return;
         
         if(crouch){
-            if(m_heldObj.transform.localScale == _scale){
-                m_heldObj.transform.localScale = m_heldObj.transform.localScale * 2;
+            if(_heldObj.transform.localScale == _scale){
+                _heldObj.transform.localScale = _heldObj.transform.localScale * 2;
                 holdArea.transform.localPosition = new Vector3(0, 0, 4.5f);
             }   
         }else{
-            m_heldObj.transform.localScale = _scale;
+            _heldObj.transform.localScale = _scale;
             holdArea.transform.localPosition = new Vector3(0, 0, 2.5f);
 
         }
@@ -68,70 +70,99 @@ public class ObjectPickup : MonoBehaviour {
     void PickupObject(GameObject pickObj)
     {
         
-        m_heldObj = pickObj;
-        _heldObjRB = pickObj.GetComponent<Rigidbody>();
-
+        _heldObj = pickObj;
+        _heldObjRb = pickObj.GetComponent<Rigidbody>();
         
-        m_heldObj.tag = "pickedUp";
-        m_heldObj.transform.parent = this.transform;
+        _boxCollider = _heldObj.GetComponent<BoxCollider>();
+        if (_boxCollider == null)
+        {
+            Debug.LogError("The held object must have a BoxCollider component.");
+            return;
+        }
         
-        _prevDrag = _heldObjRB.drag;
-        _prevAngularDrag = _heldObjRB.angularDrag;
+        _heldObj.tag = "pickedUp";
+        _heldObj.transform.parent = this.transform;
+        
+        _prevDrag = _heldObjRb.drag;
+        _prevAngularDrag = _heldObjRb.angularDrag;
          
-        _heldObjRB.drag = 2;
-        _heldObjRB.angularDrag = 1;
-        _heldObjRB.useGravity = false;
+        _heldObjRb.drag = 2;
+        _heldObjRb.angularDrag = 1;
+        _heldObjRb.useGravity = false;
         
         if(!playerMovement.crouching){
-            _scale = m_heldObj.transform.localScale;
+            _scale = _heldObj.transform.localScale;
         }else{
-            _scale = m_heldObj.transform.localScale / 2;
+            _scale = _heldObj.transform.localScale / 2;
         }
     }
     
     public void DropObject(){  
-        if(m_heldObj == null || _heldObjRB == null) { return; }
-        m_heldObj.tag = "repeat";
-        m_heldObj.transform.parent = null;
+        if(_heldObj == null || _heldObjRb == null) { return; }
+        _heldObj.tag = "repeat";
+        _heldObj.transform.parent = null;
         
-        m_heldObj = null;
-            
-        _heldObjRB.drag = _prevDrag;
-        _heldObjRB.angularDrag = _prevAngularDrag;
-        _heldObjRB.useGravity = true;
+        _heldObjRb.drag = _prevDrag;
+        _heldObjRb.angularDrag = _prevAngularDrag;
+        _heldObjRb.useGravity = true;
         
-        
-        _heldObjRB = null;
+        _heldObj = null;
+        _heldObjRb = null;
     }
 
     public LayerMask ground;
+    private BoxCollider _boxCollider;
+    // Declare a class-level list for reuse
+    List<Collider> otherColliders = new List<Collider>();
+
     void MoveObject()
     {
-        Vector3 moveDirection = (holdArea.position - m_heldObj.transform.position);
-        float moveDistance = Vector3.Distance(holdArea.position, m_heldObj.transform.position);
-        
-        RaycastHit hit;
-        if (Physics.Raycast(m_heldObj.transform.position, moveDirection, out hit, moveDistance * 2, ground))
-        {
-            // Adjust the position to the nearest non-intersecting point
-            _heldObjRB.AddForce(moveDirection * pickupForce, ForceMode.Force);
-            return;
-        }
-        
-        Collider[] col = Physics.OverlapBox(m_heldObj.transform.position, m_heldObj.transform.localScale / 2, Quaternion.identity, ground);
+        float moveDistance = Vector3.Distance(holdArea.position, _heldObj.transform.position);
 
-        if (col.Length > 1)
+        if (moveDistance > pickupRange)
         {
-            _heldObjRB.AddForce(moveDirection * pickupForce);
+            DropObject();
             return;
         }
-        m_heldObj.transform.position = holdArea.position;
-        
-        
-        
-        if (_heldObjRB.constraints != RigidbodyConstraints.FreezeRotation)
+
+        Vector3 moveDirection = (holdArea.position - _heldObj.transform.position);
+
+        Collider[] col = Physics.OverlapBox(_heldObj.transform.position + _boxCollider.center, _boxCollider.size / 2, Quaternion.identity, ground);
+    
+        otherColliders.Clear();
+        foreach (Collider c in col)
         {
-            Vector3 rotationEulerAngles = m_heldObj.transform.rotation.eulerAngles;
+            if (!c.CompareTag(_heldObj.tag))
+            {
+                otherColliders.Add(c);
+            }
+        }
+
+        if (otherColliders.Count > 0)
+        {
+            _heldObjRb.AddForce(moveDirection * (pickupForce / 2), ForceMode.Acceleration);
+            return;
+        }
+    
+        RaycastHit hit;
+        if (Physics.Raycast(_heldObj.transform.position, moveDirection, out hit, moveDistance * 3, ground))
+        {
+            Vector3 nearestPoint = hit.collider.ClosestPoint(hit.point);
+
+            moveDirection = (nearestPoint - _heldObj.transform.position);
+
+            _heldObjRb.AddForce(moveDirection * (pickupForce), ForceMode.Acceleration);
+            return;
+        }
+        
+        _heldObj.transform.position = holdArea.position;
+    }
+    
+    void rotateObject()
+    {
+        if (_heldObjRb.constraints != RigidbodyConstraints.FreezeRotation)
+        {
+            Vector3 rotationEulerAngles = _heldObjRb.transform.rotation.eulerAngles;
 
             // Round the angles to the nearest multiple of 90 degrees
             rotationEulerAngles.x = Mathf.Round(rotationEulerAngles.x / 90) * 90;
@@ -140,11 +171,8 @@ public class ObjectPickup : MonoBehaviour {
 
             // Smoothly interpolate between the current rotation and the target rotation
             Quaternion targetRotation = Quaternion.Euler(rotationEulerAngles);
-            float rotationSpeed = 20f; // Adjust the rotation speed as needed
-            _heldObjRB.MoveRotation(Quaternion.Lerp(_heldObjRB.rotation, targetRotation, Time.deltaTime * rotationSpeed));
+            float rotationSpeed = 25f; // Adjust the rotation speed as needed
+            _heldObjRb.MoveRotation(Quaternion.Lerp(_heldObjRb.rotation, targetRotation, Time.deltaTime * rotationSpeed));
         }
     }
-
-
-
 } 

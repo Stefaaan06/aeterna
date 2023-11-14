@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 
 /// <summary>
@@ -15,7 +16,8 @@ public class RepeatingArea : MonoBehaviour
 {
     public Vector3 size = new Vector3(100,100,100);     //size of the area
     [HideInInspector] public Renderer[] allRenderers;
-
+    
+    private Material _material;
     private void Start()
     {
         BoxCollider col = this.AddComponent<BoxCollider>();

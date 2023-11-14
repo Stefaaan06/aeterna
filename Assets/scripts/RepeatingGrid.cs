@@ -206,7 +206,6 @@ public class RepeatingGridEditor : Editor
     private SerializedProperty _fullRepeatingTimes;
     private SerializedProperty _repeatingArea;
     
-    
     private GUIStyle _tooltipStyle;
 
     private void OnEnable()
@@ -233,7 +232,7 @@ public class RepeatingGridEditor : Editor
         _repeatingTimes.vector3Value = EditorGUILayout.Vector3Field(new GUIContent("Repeating Times", "Amount of times to repeat"), _repeatingTimes.vector3Value);
         _fullRepeatingTimes.vector3Value = EditorGUILayout.Vector3Field(new GUIContent("Full Repeating Times", "The area in which all components should be copied as well (may be performance heavy)"), _fullRepeatingTimes.vector3Value);
         _repeatingArea.objectReferenceValue = EditorGUILayout.ObjectField(new GUIContent("Repeating Area", "The RepeatingArea script to use"), _repeatingArea.objectReferenceValue, typeof(RepeatingArea), true) as RepeatingArea;
-        
+
         
         if (GUILayout.Button("Duplicate Renderers"))
         {
