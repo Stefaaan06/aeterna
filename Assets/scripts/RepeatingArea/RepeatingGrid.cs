@@ -138,7 +138,7 @@ private void CopyEverything(GameObject originalObject, Vector3 repeatingAreaPosi
     
     
     
-    private void OnDrawGizmos()
+    private void OnDrawGizmosSelected()
     {
         drawGrid(false);
     }
