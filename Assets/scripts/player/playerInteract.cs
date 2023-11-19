@@ -11,22 +11,15 @@ public class playerInteract : MonoBehaviour
     [SerializeField] private int range;
 
     private GameObject _target;
-
-    private bool hitObject = false;
     private void Update()
     {
         RaycastHit hit;
         if(Physics.Raycast(cam.position, cam.forward, out hit, range, targetLayer))
         {
             _target = hit.transform.gameObject;
-            hitObject = true;
-        }
-        else
-        {
-            hitObject = false;
         }
 
-        if (!hitObject) return;
+        if (_target == null) return;
 
         if (Input.GetKeyDown(KeyCode.E))
         {
