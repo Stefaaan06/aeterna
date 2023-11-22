@@ -9,6 +9,7 @@ public class portalTeleporter : MonoBehaviour
     public Transform recieverTransform;
     public Collider backCol;
     public Collider otherCol;
+    public float outSpeed;
     
     private Transform _playerTransform;
     private Rigidbody _playerRigidbody;
@@ -54,7 +55,7 @@ public class portalTeleporter : MonoBehaviour
                 _playerIsOverlapping = false;
                 _teleported = true;
                 otherCol.enabled = false;
-                _playerRigidbody.AddForce(0, 0, -transform.forward.z * 1000);
+                _playerRigidbody.AddForce(0, 0, transform.forward.z * outSpeed);
             }
         }
         else
