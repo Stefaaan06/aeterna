@@ -112,9 +112,7 @@ public class ObjectPickup : MonoBehaviour {
 
     public LayerMask ground;
     private BoxCollider _boxCollider;
-    // Declare a class-level list for reuse
-    List<Collider> otherColliders = new List<Collider>();
-
+    private List<Collider> otherColliders = new List<Collider>();
     void MoveObject()
     {
         float moveDistance = Vector3.Distance(holdArea.position, _heldObj.transform.position);
@@ -126,7 +124,16 @@ public class ObjectPickup : MonoBehaviour {
         }
 
         Vector3 moveDirection = (holdArea.position - _heldObj.transform.position);
-
+        
+        RaycastHit hit;
+        if (Physics.Raycast(_heldObj.transform.position, moveDirection, out hit, moveDistance * 4, ground))
+        {
+            Vector3 nearestPoint = hit.collider.ClosestPoint(hit.point);
+            moveDirection = (nearestPoint - _heldObj.transform.position);
+            _heldObjRb.AddForce(moveDirection * (pickupForce), ForceMode.Acceleration);
+            return;
+        }
+        
         Collider[] col = Physics.OverlapBox(_heldObj.transform.position + _boxCollider.center, _boxCollider.size / 2, Quaternion.identity, ground);
     
         otherColliders.Clear();
@@ -140,23 +147,15 @@ public class ObjectPickup : MonoBehaviour {
 
         if (otherColliders.Count > 0)
         {
-            _heldObjRb.AddForce(moveDirection * (pickupForce / 2), ForceMode.Acceleration);
-            return;
-        }
-    
-        RaycastHit hit;
-        if (Physics.Raycast(_heldObj.transform.position, moveDirection, out hit, moveDistance * 3, ground))
-        {
-            Vector3 nearestPoint = hit.collider.ClosestPoint(hit.point);
-
+            Vector3 nearestPoint = otherColliders[0].ClosestPoint(holdArea.position);
+            
             moveDirection = (nearestPoint - _heldObj.transform.position);
-
-            _heldObjRb.AddForce(moveDirection * (pickupForce), ForceMode.Acceleration);
+            _heldObjRb.AddForce(moveDirection, ForceMode.Force);
             return;
         }
-        
         _heldObj.transform.position = holdArea.position;
     }
+
     
     void rotateObject()
     {

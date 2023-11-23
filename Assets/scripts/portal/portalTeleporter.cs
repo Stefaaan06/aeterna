@@ -18,11 +18,13 @@ public class portalTeleporter : MonoBehaviour
     private int _cooldown = 160;
     private int _currentCooldown = 0;
     private bool _teleported;
+    private PlayerMovement _playerMovement;
 
     void Start()
     {
-        _playerTransform = FindObjectOfType<PlayerMovement>().transform;
-        _playerRigidbody = FindObjectOfType<PlayerMovement>().GetComponent<Rigidbody>();
+        _playerMovement = FindObjectOfType<PlayerMovement>();
+        _playerTransform = _playerMovement.transform;
+        _playerRigidbody = _playerMovement.GetComponent<Rigidbody>();
     }
 
     void Update () {
@@ -37,7 +39,7 @@ public class portalTeleporter : MonoBehaviour
                 otherCol.enabled = true;
             }
         }
-        if (_playerIsOverlapping && !_teleported)
+        if (_playerIsOverlapping && !_teleported && _playerMovement.moving)
         {
             backCol.enabled = false;
             Vector3 portalToPlayer = _playerTransform.position - transform.position;
