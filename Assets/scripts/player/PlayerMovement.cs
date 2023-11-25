@@ -89,27 +89,28 @@ public class PlayerMovement : MonoBehaviour {
                 Jump();
             }
         }
-
+        /*
         if (canSlide)
         {
             //Crouching
-                    if (Input.GetKeyDown(KeyCode.C))
-                    {
-                        StartCrouch();
-                    }
-            
-                    if (Input.GetKeyUp(KeyCode.C))
-                    {
-                        if (canUncrouch)
-                        {
-                            StopCrouch();
-                        }
-                        else
-                        {
-                            StartCoroutine(checkForUncrouch());
-                        }
-                    }
+            if (Input.GetKeyDown(KeyCode.C))
+            {
+                StartCrouch();
+            }
+    
+            if (Input.GetKeyUp(KeyCode.C))
+            {
+                if (canUncrouch)
+                {
+                    StopCrouch();
+                }
+                else
+                {
+                    StartCoroutine(checkForUncrouch());
+                }
+            }
         }
+        */
         
     }
     IEnumerator checkForUncrouch()

@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
+using UnityEngine.Events;
 
 /**
  * Description: Script allowing the Player to pick up Objects
@@ -69,16 +67,12 @@ public class ObjectPickup : MonoBehaviour {
     private float _prevDrag;
     void PickupObject(GameObject pickObj)
     {
+        EventManager.Instance.invokePickupEventGlobal(); // event for scalableObject.cs
         
         _heldObj = pickObj;
         _heldObjRb = pickObj.GetComponent<Rigidbody>();
         
         _boxCollider = _heldObj.GetComponent<BoxCollider>();
-        if (_boxCollider == null)
-        {
-            Debug.LogError("The held object must have a BoxCollider component.");
-            return;
-        }
         
         _heldObj.tag = "pickedUp";
         _heldObj.transform.parent = this.transform;
@@ -130,7 +124,7 @@ public class ObjectPickup : MonoBehaviour {
         {
             Vector3 nearestPoint = hit.collider.ClosestPoint(hit.point);
             moveDirection = (nearestPoint - _heldObj.transform.position);
-            _heldObjRb.AddForce(moveDirection * (pickupForce), ForceMode.Acceleration);
+            _heldObjRb.AddForce(moveDirection * pickupForce, ForceMode.Acceleration);
             return;
         }
         
@@ -150,7 +144,7 @@ public class ObjectPickup : MonoBehaviour {
             Vector3 nearestPoint = otherColliders[0].ClosestPoint(holdArea.position);
             
             moveDirection = (nearestPoint - _heldObj.transform.position);
-            _heldObjRb.AddForce(moveDirection, ForceMode.Force);
+            _heldObjRb.AddForce(moveDirection * pickupForce, ForceMode.Force);
             return;
         }
         _heldObj.transform.position = holdArea.position;

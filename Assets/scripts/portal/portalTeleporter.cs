@@ -9,13 +9,12 @@ public class portalTeleporter : MonoBehaviour
     public Transform recieverTransform;
     public Collider backCol;
     public Collider otherCol;
-    public float outSpeed;
+    public Collider thisCol;
     
     private Transform _playerTransform;
-    private Rigidbody _playerRigidbody;
     private bool _playerIsOverlapping = false;
 
-    private int _cooldown = 160;
+    private int _cooldown = 50;
     private int _currentCooldown = 0;
     private bool _teleported;
     private PlayerMovement _playerMovement;
@@ -24,10 +23,10 @@ public class portalTeleporter : MonoBehaviour
     {
         _playerMovement = FindObjectOfType<PlayerMovement>();
         _playerTransform = _playerMovement.transform;
-        _playerRigidbody = _playerMovement.GetComponent<Rigidbody>();
     }
 
-    void Update () {
+    private void FixedUpdate()
+    {
         //cooldown
         if(_teleported)
         {
@@ -37,16 +36,19 @@ public class portalTeleporter : MonoBehaviour
                 _teleported = false;
                 _currentCooldown = 0;
                 otherCol.enabled = true;
+                thisCol.enabled = true;
             }
         }
+    }
+
+    void Update () {
         if (_playerIsOverlapping && !_teleported && _playerMovement.moving)
         {
             backCol.enabled = false;
             Vector3 portalToPlayer = _playerTransform.position - transform.position;
             float dotProduct = Vector3.Dot(transform.forward, portalToPlayer);
 
-            if (dotProduct < 0f)
-            {
+
                 float rotationDiff = -Quaternion.Angle(transform.rotation, recieverTransform.rotation);
                 _playerTransform.Rotate(Vector3.up, rotationDiff);
                 
@@ -57,8 +59,8 @@ public class portalTeleporter : MonoBehaviour
                 _playerIsOverlapping = false;
                 _teleported = true;
                 otherCol.enabled = false;
-                _playerRigidbody.AddForce(0, 0, transform.forward.z * outSpeed);
-            }
+                thisCol.enabled = false;
+            
         }
         else
         {

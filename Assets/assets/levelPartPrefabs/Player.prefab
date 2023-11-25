@@ -90,6 +90,7 @@ GameObject:
   - component: {fileID: 2521175398714956495}
   - component: {fileID: 3409671444120539304}
   - component: {fileID: 3581412983839397241}
+  - component: {fileID: 3330374879200995653}
   m_Layer: 6
   m_Name: Player
   m_TagString: player
@@ -275,11 +276,28 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   playerMovement: {fileID: 2786104065050974145}
-  pickupRange: 20
-  pickupForce: 500
+  pickupRange: 15
+  pickupForce: 30
   ground:
     serializedVersion: 2
-    m_Bits: 384
+    m_Bits: 3221225856
+--- !u!114 &3330374879200995653
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 801702898233055769}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84a024454b8fbab41938ee4ad1cf7e28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 1024
+  cam: {fileID: 899524631807810213}
+  range: 15
 --- !u!1 &1378936458082496046
 GameObject:
   m_ObjectHideFlags: 0
@@ -5548,7 +5566,7 @@ GameObject:
   - component: {fileID: 2533124525454837699}
   m_Layer: 6
   m_Name: 'Camera '
-  m_TagString: Untagged
+  m_TagString: playerCam
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6001,7 +6019,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 65535
+    m_Bits: 4294967295
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0

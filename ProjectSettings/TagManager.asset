@@ -9,6 +9,7 @@ TagManager:
   - ignoreDuplicate
   - repeat
   - pickedUp
+  - playerCam
   layers:
   - Default
   - TransparentFX

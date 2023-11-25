@@ -29,6 +29,11 @@ public class RepeatingArea : MonoBehaviour
     {
         if (other.CompareTag("player") || other.CompareTag("repeat"))
         {
+            if(Vector3.Distance(this.transform.position, other.transform.position) > size.magnitude * 2)
+            {
+                return;
+            }
+            
             Vector3 newSize = size / 2;
             Vector3 currentPosition = other.transform.position;
             

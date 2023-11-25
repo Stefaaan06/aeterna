@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class scalableObject : MonoBehaviour
 {
@@ -10,8 +11,9 @@ public class scalableObject : MonoBehaviour
     public Vector3 maxScale;
     public Vector3 minScale;
     public Vector3 scaleSpeed;
+    public float playerBoost = 1f;
     public bool reverse; // if true, scale down instead of up
-
+    
     private bool _playerContact = false;
     private bool _otherContact = false;
     
@@ -20,6 +22,22 @@ public class scalableObject : MonoBehaviour
     private PlayerMovement _playerMovement;
     private Collider _col;
 
+    
+    private void OnEnable()
+    {
+        EventManager.Instance.PickupEventGlobalEvent += HandleGlobalEvent;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.Instance.PickupEventGlobalEvent -= HandleGlobalEvent;
+    }
+    
+    private void HandleGlobalEvent()
+    {
+        _otherContact = false;
+    }
+    
     private void Start()
     {
         _playerMovement = FindObjectOfType<PlayerMovement>();
@@ -62,6 +80,11 @@ public class scalableObject : MonoBehaviour
         if (other.gameObject.CompareTag("player"))
         {
             _playerContact = false;
+            //check if player is holding object while leaving collider 
+            if(other.gameObject.GetComponentInChildren<extraGrav>())
+            {
+                _otherContact = false;
+            }
         }
         if (other.gameObject.CompareTag("repeat"))
         {
@@ -85,9 +108,15 @@ public class scalableObject : MonoBehaviour
                 // Calculate the relative position vector between the player and the object with this script.
                 Vector3 relativePosition = player.position - transform.position;
 
-                // Apply the boost force in the direction of the relative position.
-                player.AddForce(relativePosition.normalized * boostForce, ForceMode.Impulse);
-            
+                // Apply the boost force only in directions where scaleSpeed is not 0.
+                Vector3 boostForceVector = new Vector3(
+                    scaleSpeed.x != 0 ? relativePosition.x : 0,
+                    scaleSpeed.y != 0 ? relativePosition.y : 0,
+                    scaleSpeed.z != 0 ? relativePosition.z : 0
+                );
+
+                player.AddForce(boostForceVector.normalized * (boostForce * playerBoost), ForceMode.Impulse);
+
                 _cooldown = true;
                 _playerMovement.canMove = false;
                 _boostCooldownTimer = _boostCooldown;
@@ -96,8 +125,14 @@ public class scalableObject : MonoBehaviour
                 // Calculate the relative position vector between the player and the object with this script.
                 Vector3 relativePosition = _otherRb.position - transform.position;
 
-                // Apply the boost force in the direction of the relative position.
-                _otherRb.AddForce(relativePosition.normalized * boostForce, ForceMode.Impulse);
+                // Apply the boost force only in directions where scaleSpeed is not 0.
+                Vector3 boostForceVector = new Vector3(
+                    scaleSpeed.x != 0 ? relativePosition.x : 0,
+                    scaleSpeed.y != 0 ? relativePosition.y : 0,
+                    scaleSpeed.z != 0 ? relativePosition.z : 0
+                );
+
+                _otherRb.AddForce(boostForceVector.normalized * boostForce, ForceMode.Impulse);
             }
             
             Vector3 newScale = transform.localScale + scaleSpeed * Time.deltaTime;

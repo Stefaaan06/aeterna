@@ -41,7 +41,7 @@ public class scalingGun : MonoBehaviour
     
     
     /// <summary>
-    /// obsolote? 
+    /// obsolete? 
     /// </summary>
     private RaycastHit _prevHit;
     private bool sameHit;
