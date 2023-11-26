@@ -8,7 +8,7 @@ using UnityEngine.Serialization;
 
 
 /// <summary>
-/// Holds the points of the designated are to repeat & draws a gizmo
+/// Holds the points of the designated area to repeat & draws a gizmo
 /// <author>Stefaaan06</author>
 /// <version>1.0.0</version>
 /// </summary>
