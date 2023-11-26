@@ -25,11 +25,13 @@ public class scalableObject : MonoBehaviour
     
     private void OnEnable()
     {
+        if(EventManager.Instance == null) return;
         EventManager.Instance.PickupEventGlobalEvent += HandleGlobalEvent;
     }
 
     private void OnDisable()
     {
+        if(EventManager.Instance == null) return;
         EventManager.Instance.PickupEventGlobalEvent -= HandleGlobalEvent;
     }
     

@@ -7,17 +7,26 @@ public class portalTextureSetup : MonoBehaviour
     public Camera cameraA;
     public Camera cameraB;
 
-    public Material cameraMatA;
-    public Material cameraMatB;
+    public GameObject renderA;
+    public GameObject renderB;
+    
+    private Material _cameraMatA;
+    private Material _cameraMatB;
 
     void Start () {
+        _cameraMatA = new Material(Shader.Find("Unlit/ScreenCutoutShader"));
+        _cameraMatB = new Material(Shader.Find("Unlit/ScreenCutoutShader"));
+        
+        renderA.transform.GetComponent<MeshRenderer>().material = _cameraMatB;
+        renderB.transform.GetComponent<MeshRenderer>().material = _cameraMatA;
+
         if (cameraA.targetTexture != null)
         {
             cameraA.targetTexture.Release();
         }
         
         cameraA.targetTexture = new RenderTexture(Screen.width, Screen.height, 24);
-        cameraMatA.mainTexture = cameraA.targetTexture;
+        _cameraMatA.mainTexture = cameraA.targetTexture;
 
         if (cameraB.targetTexture != null)
         {
@@ -25,6 +34,6 @@ public class portalTextureSetup : MonoBehaviour
         }
         
         cameraB.targetTexture = new RenderTexture(Screen.width, Screen.height, 24);
-        cameraMatB.mainTexture = cameraB.targetTexture;
+        _cameraMatB.mainTexture = cameraB.targetTexture;
     }
 }
