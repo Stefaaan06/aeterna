@@ -11,8 +11,10 @@ public class playerTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        
         if (other.CompareTag("player"))
         {
+            Debug.Log("triggered");
             onTriggerEnter.Invoke();
         }
     }

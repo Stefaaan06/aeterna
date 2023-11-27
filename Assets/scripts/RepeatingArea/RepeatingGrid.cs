@@ -149,12 +149,12 @@ private void CopyEverything(GameObject originalObject, Vector3 repeatingAreaPosi
     /// <param name="highlited">determines if the Gizmo should be drawn highlited or not</param>
     void drawGrid(bool highlited)
     {
-        if (repeatingTimes.x > 10 || repeatingTimes.y > 10 || repeatingTimes.z > 10)
+        if (repeatingTimes.x > 15 || repeatingTimes.y > 15 || repeatingTimes.z > 15)
         {
-            Debug.LogError("RepeatingTimes is higher than 10. This will cause significant performance issues.");
+            Debug.LogError("RepeatingTimes is higher than 15. This will cause significant performance issues. Resetting now.");
             repeatingTimes = new Vector3(1,1,1);
         }
-
+        
         if (highlited)
         {
             Gizmos.color = new Color(1, 1, 0, 0.5f);

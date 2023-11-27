@@ -70,7 +70,7 @@ public class scalableObject : MonoBehaviour
             _playerContact = true;
         }
 
-        if (other.gameObject.CompareTag("repeat"))
+        if (other.gameObject.layer == 9)
         {
             _otherContact = true;
             _otherRb = other.gameObject.GetComponent<Rigidbody>();
@@ -88,7 +88,7 @@ public class scalableObject : MonoBehaviour
                 _otherContact = false;
             }
         }
-        if (other.gameObject.CompareTag("repeat"))
+        if (other.gameObject.layer == 9)
         {
             _otherContact = false;
         }
@@ -134,7 +134,7 @@ public class scalableObject : MonoBehaviour
                     scaleSpeed.z != 0 ? relativePosition.z : 0
                 );
 
-                _otherRb.AddForce(boostForceVector.normalized * boostForce, ForceMode.Impulse);
+                _otherRb.AddForce(boostForceVector.normalized * boostForce * playerBoost, ForceMode.Impulse);
             }
             
             Vector3 newScale = transform.localScale + scaleSpeed * Time.deltaTime;
