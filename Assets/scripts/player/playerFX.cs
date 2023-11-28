@@ -2,22 +2,37 @@ using UnityEngine.UI;
 using UnityEngine;
 using System;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 //manages player vfx, sfx and other effects
 public class playerFX : MonoBehaviour
 {
     public Image panel;
+    
 
     private void Start()
     {
-        fadeToNormal();
+        if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("Level 1"))
+        {
+            Debug.Log("x");
+            fadeToNormalLong();
+        }
+        else
+        {
+            fadeToNormal();
+        }
     }
 
+    
     public void shakeEarthquake()
     {
         CameraShaker.CameraShaker.Instance.Shake(CameraShaker.CameraShakePresets.Earthquake);
     }
+    public void fadeToNormalLong()
+    {
+        StartCoroutine(FadePanel(20, 0f)); 
 
+    }
     public void fadeToNormal()
     {
         StartCoroutine(FadePanel(6, 0f)); 
