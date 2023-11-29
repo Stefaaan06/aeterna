@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 public class fadeIn : MonoBehaviour
@@ -13,8 +14,15 @@ public class fadeIn : MonoBehaviour
         fadeToNormal();
     } 
 
+    public void fadeToBlack()
+    {
+        StopAllCoroutines();
+        StartCoroutine(FadePanel(1, 1f)); 
+    }
+    
     public void fadeToNormal()
     {
+        StopAllCoroutines();
         StartCoroutine(FadePanel(8, 0f)); 
     }
     

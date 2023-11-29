@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,14 +14,19 @@ public class txtHover : MonoBehaviour
     private Color originalTextColor = Color.black;
     private Color hoverTextColor = Color.white;
 
+    private mainMenuSFX _sfx;
+
     private void Start()
     {
-        EventTrigger eventTrigger = text.gameObject.GetComponent<EventTrigger>();
+        
+        _sfx = FindObjectOfType<mainMenuSFX>();
+        
+        EventTrigger eventTrigger = gameObject.GetComponent<EventTrigger>();
         if (eventTrigger == null)
         {
-            eventTrigger = text.gameObject.AddComponent<EventTrigger>();
+            eventTrigger = gameObject.AddComponent<EventTrigger>();
         }
-
+        
         EventTrigger.Entry entryEnter = new EventTrigger.Entry();
         entryEnter.eventID = EventTriggerType.PointerEnter;
         entryEnter.callback.AddListener((data) => { OnPointerEnter(); });
@@ -30,19 +36,34 @@ public class txtHover : MonoBehaviour
         entryExit.eventID = EventTriggerType.PointerExit;
         entryExit.callback.AddListener((data) => { OnPointerExit(); });
         eventTrigger.triggers.Add(entryExit);
+        
     }
+
+    private bool _firstEnable = true;
+    public void OnEnable()
+    {
+        if (_firstEnable)
+        {
+            _firstEnable = false;
+            return;
+        }
+        text.color = originalTextColor;
+        panel.color = new Color(0, 0, 0, 0);
+    }
+
 
     private void OnPointerEnter()
     {
+        _sfx.PlayHover();
         text.color = hoverTextColor;
-
+        StopAllCoroutines();
         StartCoroutine(FadePanel(true));
     }
 
     private void OnPointerExit()
     {
         text.color = originalTextColor;
-
+        StopAllCoroutines();
         StartCoroutine(FadePanel(false));
     }
 
