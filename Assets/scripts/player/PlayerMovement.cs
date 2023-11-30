@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour {
-    [SerializeField ] private Rigidbody rb;
+    [SerializeField] private Rigidbody rb;
 
     
     
@@ -16,7 +16,7 @@ public class PlayerMovement : MonoBehaviour {
     public float maxSpeed = 20;
     public float counterMovement = 0.175f;
     public float maxAngle = 50;
-    public bool grounded, onSlope;
+    [SerializeField ] public bool grounded, onSlope;
     public LayerMask whatIsGround;
     public float groundDistance;
 
@@ -42,16 +42,16 @@ public class PlayerMovement : MonoBehaviour {
 
     //Input
     float x, y;
-    public bool jumping, crouching = false;
+    [SerializeField ] bool jumping, crouching = false;
     
     //MovementStates
-    public bool canSlide = true, canJump = true, canMove = true, moving = false;
+    [SerializeField ] public bool canSlide = true, canJump = true, canMove = true, moving = false;
 
     [Header("References")]
     [SerializeField] WallRunning wallRun;
     [SerializeField] GrapplingGun grappling;
     [SerializeField] private ObjectPickup objectPickup;
-
+    [SerializeField] private playerFX playerFX;
     void Start()
     {
         Cursor.visible = false;
@@ -61,24 +61,49 @@ public class PlayerMovement : MonoBehaviour {
         playerScale = this.transform.localScale;
     }
 
-
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.relativeVelocity.magnitude > 6 && _timeInAir > 10)
+        {
+            playerFX.playCollisionSound(collision);
+        }
+    }
+    private int _timeInAir;
+    void airTime()
+    {
+        if (!grounded)
+        {
+            _timeInAir++;
+        }
+        else
+        {
+            if(_timeInAir > 0)
+            {
+                _timeInAir -= 5;
+            }
+        }
+    }
     private void FixedUpdate() {
         Movement();
     }
     void Update(){ 
         CheckIfGrounded();
-        CheckForObjects();
         MyInput();
+        airTime();
         Look();
     }
-    
-    
-    private void MyInput() {
+
+
+    private void MyInput()
+    {
         x = Input.GetAxisRaw("Horizontal");
         y = Input.GetAxisRaw("Vertical");
-        if(rb.velocity.magnitude > 1){
+        if (rb.velocity.magnitude > 1)
+        {
             moving = true;
-        }else{
+        }
+        else
+        {
             moving = false;
         }
 
@@ -89,76 +114,20 @@ public class PlayerMovement : MonoBehaviour {
                 Jump();
             }
         }
-        /*
-        if (canSlide)
-        {
-            //Crouching
-            if (Input.GetKeyDown(KeyCode.C))
-            {
-                StartCrouch();
-            }
-    
-            if (Input.GetKeyUp(KeyCode.C))
-            {
-                if (canUncrouch)
-                {
-                    StopCrouch();
-                }
-                else
-                {
-                    StartCoroutine(checkForUncrouch());
-                }
-            }
-        }
-        */
-        
-    }
-    IEnumerator checkForUncrouch()
-    {
-        if (canUncrouch)
-        {
-            StopCrouch();
-        }
-        else
-        {
-            yield return new WaitForEndOfFrame();
-            StartCoroutine(checkForUncrouch());
-        }
     }
 
-    private void StartCrouch() {
-        transform.localScale = _crouchScale;
-        objectPickup.crouch(true);
-        transform.position = new Vector3(transform.position.x, transform.position.y - 0.5f, transform.position.z);
-        crouching = true;
-        if (rb.velocity.magnitude > 0.5f) {
-            if (grounded) {
-                rb.AddForce(orientation.transform.forward * slideForce);  
-            }
-        }
 
-        groundDistance = _origGround / 2;
-    }
-
-    public void StopCrouch() {    
-        transform.localScale = playerScale;
-        objectPickup.crouch(false);
-        transform.position = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
-        crouching = false;
-
-        groundDistance = _origGround;
-    }
-    
     private void Jump()
     {
         if (grounded && _readyToJump)
         {
+            playerFX.Jump();
             jumping = true;
             _readyToJump = false;
 
             //jump force
-            rb.AddForce(Vector2.up * jumpForce * 1.5f);
-            rb.AddForce(Vector3.up * jumpForce * 0.5f);
+            rb.AddForce(Vector2.up * (jumpForce * 1.5f));
+            rb.AddForce(Vector3.up * (jumpForce * 0.5f));
             
             Vector3 vel = rb.velocity;
             if (rb.velocity.y < 0.5f)
@@ -327,18 +296,6 @@ public class PlayerMovement : MonoBehaviour {
         _moveDir = orientation.forward * y + orientation.right * x;
         return Vector3.ProjectOnPlane(_moveDir, _hit.normal).normalized;
     }
-
-    void CheckForObjects(){
-        if(Physics.Raycast(headCheck.position, Vector3.up, 2, CanUncrouch)){
-            canUncrouch = false;
-        }else{
-            canUncrouch = true;
-            if(crouching){
-                if(Input.GetKeyUp(KeyCode.C)){
-                    StopCrouch();
-                }
-            }
-        }
-    }
+    
 
 }

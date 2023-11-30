@@ -45,22 +45,7 @@ public class ObjectPickup : MonoBehaviour {
         rotateObject();
         MoveObject();
     }
-
-    public void crouch(bool crouch)
-    {
-        if(_heldObj == null) return;
-        
-        if(crouch){
-            if(_heldObj.transform.localScale == _scale){
-                _heldObj.transform.localScale = _heldObj.transform.localScale * 2;
-                holdArea.transform.localPosition = new Vector3(0, 0, 4.5f);
-            }   
-        }else{
-            _heldObj.transform.localScale = _scale;
-            holdArea.transform.localPosition = new Vector3(0, 0, 2.5f);
-
-        }
-    }
+    
     
 
     float _prevAngularDrag;
@@ -83,12 +68,6 @@ public class ObjectPickup : MonoBehaviour {
         _heldObjRb.drag = 2;
         _heldObjRb.angularDrag = 1;
         _heldObjRb.useGravity = false;
-        
-        if(!playerMovement.crouching){
-            _scale = _heldObj.transform.localScale;
-        }else{
-            _scale = _heldObj.transform.localScale / 2;
-        }
     }
     
     public void DropObject(){  

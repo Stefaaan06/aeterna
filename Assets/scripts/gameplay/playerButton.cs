@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -17,6 +19,28 @@ public class playerButton : MonoBehaviour
     public float delayTime;
     
     private bool _pressed = false;
+
+
+    private AudioSource _source;
+    private AudioClip[] clips;
+    private void Start()
+    {
+        _source = this.GetComponent<AudioSource>();
+        if (_source == null)
+        {
+            _source = this.AddComponent<AudioSource>();
+        }
+        
+        _source.spatialBlend = 1f;
+        _source.maxDistance = 40f;
+        _source.rolloffMode = AudioRolloffMode.Custom;
+
+        clips = new AudioClip[]
+        {
+            Resources.Load<AudioClip>("SFX/buttonClick"),
+        };
+    }
+
     public void buttonHighlight()
     {
         

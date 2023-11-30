@@ -9,9 +9,11 @@ public class mainMenu : MonoBehaviour
     public fadeIn fade;
     public mainMenuAnim anim;
 
+    public AudioSource musicSource;
     public void StartGame()
     {
         fade.fadeToBlack();
+        StartCoroutine(FadeOutMusic(1f));
         Invoke("start", 1f);
     }
 
@@ -20,6 +22,19 @@ public class mainMenu : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
+    IEnumerator FadeOutMusic(float fadeOutDuration)
+    {
+        float startVolume = musicSource.volume;
+
+        while (musicSource.volume > 0)
+        {
+            musicSource.volume -= startVolume * Time.deltaTime / fadeOutDuration;
+            yield return null;
+        }
+
+        musicSource.volume = 0;
+    }
+    
     public void Settings()
     {
         StartCoroutine(anim.fadeOutMain());

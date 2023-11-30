@@ -14,7 +14,6 @@ public class playerTrigger : MonoBehaviour
         
         if (other.CompareTag("player"))
         {
-            Debug.Log("triggered");
             onTriggerEnter.Invoke();
         }
     }

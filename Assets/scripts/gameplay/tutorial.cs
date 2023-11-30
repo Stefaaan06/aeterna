@@ -9,8 +9,6 @@ public class tutorial : MonoBehaviour
 
     public void fadeInText(int num)
     {
-        Debug.Log("start");
-
         StartCoroutine(fadeInText(tutorialText[num], 1f));
         StartCoroutine(waitForFadeOut(num));
     }
@@ -28,7 +26,6 @@ public class tutorial : MonoBehaviour
     
     IEnumerator fadeInText(TextMeshProUGUI tmp, float targetAlpha)
     {
-        Debug.Log("start 2   ");
         Color startColor = tmp.color;
         Color targetColor = new Color(startColor.r, startColor.g, startColor.b, targetAlpha); 
         float duration = 2f; 

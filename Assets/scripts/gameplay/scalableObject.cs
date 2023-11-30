@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -39,9 +40,28 @@ public class scalableObject : MonoBehaviour
     {
         _otherContact = false;
     }
-    
+
+    private AudioSource _source;
+    private AudioClip[] clips;
     private void Start()
     {
+        _source = this.GetComponent<AudioSource>();
+        if (_source == null)
+        {
+            _source = this.AddComponent<AudioSource>();
+        }
+        
+        _source.spatialBlend = 1f;
+        _source.maxDistance = 40f;
+        _source.rolloffMode = AudioRolloffMode.Custom;
+
+        clips = new AudioClip[]
+        {
+
+            Resources.Load<AudioClip>("SFX/scale"),
+            Resources.Load<AudioClip>("SFX/scaleDown")
+        };
+        
         _playerMovement = FindObjectOfType<PlayerMovement>();
         player = FindObjectOfType<PlayerMovement>().GetComponent<Rigidbody>();
         _col = GetComponent<Collider>();
@@ -104,6 +124,11 @@ public class scalableObject : MonoBehaviour
         
         if (transform.localScale.x < maxScale.x || transform.localScale.y < maxScale.y || transform.localScale.z < maxScale.z)
         {
+            if (!_source.isPlaying)
+            {
+                _source.PlayOneShot(clips[0], 0.3f);
+            }
+            
             _col.enabled = true;
             if (_playerContact && !_cooldown)
             {
@@ -163,6 +188,10 @@ public class scalableObject : MonoBehaviour
         }
         if (transform.localScale.x > minScale.x || transform.localScale.y > minScale.y || transform.localScale.z > minScale.z)
         {
+            if (!_source.isPlaying)
+            {
+                _source.PlayOneShot(clips[1], 0.3f);
+            }
             Vector3 newScale = transform.localScale - scaleSpeed * Time.deltaTime;
             transform.localScale = new Vector3(
                 Mathf.Max(newScale.x, minScale.x),
