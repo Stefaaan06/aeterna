@@ -49,6 +49,9 @@ public class playerButton : MonoBehaviour
     
     public void buttonPress()
     {
+     
+        _source.pitch = UnityEngine.Random.Range(0.9f, 1.1f);
+        _source.PlayOneShot(clips[0], 0.3f);
         
         onButtonPressInstantNoDisable.Invoke();
         

@@ -42,7 +42,6 @@ public class scalableObject : MonoBehaviour
     }
 
     private AudioSource _source;
-    private AudioClip[] clips;
     private void Start()
     {
         _source = this.GetComponent<AudioSource>();
@@ -54,13 +53,7 @@ public class scalableObject : MonoBehaviour
         _source.spatialBlend = 1f;
         _source.maxDistance = 40f;
         _source.rolloffMode = AudioRolloffMode.Custom;
-
-        clips = new AudioClip[]
-        {
-
-            Resources.Load<AudioClip>("SFX/scale"),
-            Resources.Load<AudioClip>("SFX/scaleDown")
-        };
+        _source.clip = Resources.Load<AudioClip>("SFX/earthquakeSfx");
         
         _playerMovement = FindObjectOfType<PlayerMovement>();
         player = FindObjectOfType<PlayerMovement>().GetComponent<Rigidbody>();
@@ -113,7 +106,31 @@ public class scalableObject : MonoBehaviour
             _otherContact = false;
         }
     }
+
+    IEnumerator playAudio(int thisCur)
+    {
+        _source.Play();
+        yield return new WaitForSeconds(0.2f);
+        StartCoroutine(FadeOut(0.2f));
+    }
     
+    IEnumerator FadeOut(float fadeOutDuration)
+    {
+        float startVolume = _source.volume;
+
+        while (_source.volume > 0)
+        {
+            _source.volume -= startVolume * Time.deltaTime / fadeOutDuration;
+            yield return null;
+        }
+
+        _source.Pause();
+        _source.volume = 1;
+    }
+
+    
+
+    private int _cur = 0;
     public void ScaleUp(float boostForce, bool stop)
     {
         if (reverse && !stop)
@@ -124,9 +141,10 @@ public class scalableObject : MonoBehaviour
         
         if (transform.localScale.x < maxScale.x || transform.localScale.y < maxScale.y || transform.localScale.z < maxScale.z)
         {
+            _cur++;
             if (!_source.isPlaying)
             {
-                _source.PlayOneShot(clips[0], 0.3f);
+                StartCoroutine(playAudio(_cur));
             }
             
             _col.enabled = true;
@@ -188,9 +206,10 @@ public class scalableObject : MonoBehaviour
         }
         if (transform.localScale.x > minScale.x || transform.localScale.y > minScale.y || transform.localScale.z > minScale.z)
         {
+            _cur++;
             if (!_source.isPlaying)
             {
-                _source.PlayOneShot(clips[1], 0.3f);
+                StartCoroutine(playAudio(_cur));
             }
             Vector3 newScale = transform.localScale - scaleSpeed * Time.deltaTime;
             transform.localScale = new Vector3(

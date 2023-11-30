@@ -65,7 +65,7 @@ public class playerFX : MonoBehaviour
 
     public void Jump()
     {
-        source.PlayOneShot(walkClips[UnityEngine.Random.Range(0, 10 - 1)], 0.4f);
+        source.PlayOneShot(walkClips[UnityEngine.Random.Range(0, 10 - 1)], 0.7f);
         CameraShaker.CameraShaker.Instance.ShakeOnce(1.2f, 1.2f, 0.2f, 0.5f);
     }
 
