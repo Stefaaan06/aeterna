@@ -1,4 +1,4 @@
-[Aeterna thumbnail picture](https://i.imgur.com/Qb5yDQE.png)
+[Aeterna thumbnail picture](https://i.imgur.com/Qb5yDQE.png "Aeterna thumbnail picture")
 # Aeterna - GithubGameOff2023
 
 This is a repo for my game jam submission "Aeterna" for the [Github Gameoff 2023](https://itch.io/jam/game-off-2023).
