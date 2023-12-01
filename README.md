@@ -1,4 +1,3 @@
-![Aeterna Image Banner]([https://github.com/altercation/solarized/raw/master/img/solarized-palette.png](https://github.com/Qantrex/aeterna/blob/de70ed467e45a7f828e07a2f7a872c7fe429f429/Aeterna_banner.png))
 # Aeterna - GithubGameOff2023
 
 This is a repo for my game jam submission "Aeterna" for the [Github Gameoff 2023](https://itch.io/jam/game-off-2023).
