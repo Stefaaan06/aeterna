@@ -1,8 +1,7 @@
-<!-- Aeterna - GithubGameOff2023 -->
-
+[Aeterna thumbnail picture](https://i.imgur.com/Qb5yDQE.png)
 # Aeterna - GithubGameOff2023
 
-This is a repo for my game jam submission "Aeterna" for the Github Gameoff 2023.
+This is a repo for my game jam submission "Aeterna" for the [Github Gameoff 2023](https://itch.io/jam/game-off-2023).
 
 # About the Game
 A non-euclidean 🧩 puzzle-parkour game set in an infinite world.
@@ -24,8 +23,7 @@ Developer: [Stefaaan](https://twitter.com/Stefaaan06)
 [Wishlist my game on steam](https://store.steampowered.com/news/app/2547010/view/3676680576869832935)
     
 If you encounter any issues or have feedback, feel free to reach out to me on Twitter or open a issue (Twitter is preferred).
-```diff
-+ ## Legal Details
-```
+
+# Legal Details
 
 This project is licensed under the terms of the [Apache License 2.0](https://opensource.org/licenses/Apache-2.0) - see the [LICENSE](LICENSE) file for details.
