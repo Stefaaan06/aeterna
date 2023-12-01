@@ -15,12 +15,7 @@ public class settingsMenu : MonoBehaviour
     {
         if (PlayerPrefs.GetInt("Start") == 0)
         {
-            for (int i = 1; i <= 10; i++)
-            {
-                string name = "l" + i + "p";
-                PlayerPrefs.SetInt(name, 0);
-            }
-
+            PlayerPrefs.SetInt("lvl", 1);
             PlayerPrefs.SetInt("quality", 1);
             PlayerPrefs.SetInt("mainVolume ", 0);
             PlayerPrefs.SetInt("Start", 1);

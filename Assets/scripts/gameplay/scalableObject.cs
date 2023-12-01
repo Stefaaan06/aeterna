@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.Events;
 
 public class scalableObject : MonoBehaviour
@@ -51,9 +52,11 @@ public class scalableObject : MonoBehaviour
         }
         
         _source.spatialBlend = 1f;
-        _source.maxDistance = 40f;
+        _source.maxDistance = 60f;
         _source.rolloffMode = AudioRolloffMode.Custom;
         _source.clip = Resources.Load<AudioClip>("SFX/earthquakeSfx");
+        _source.outputAudioMixerGroup = Resources.Load<AudioMixerGroup>("SFX");
+
         
         _playerMovement = FindObjectOfType<PlayerMovement>();
         player = FindObjectOfType<PlayerMovement>().GetComponent<Rigidbody>();
@@ -96,7 +99,7 @@ public class scalableObject : MonoBehaviour
         {
             _playerContact = false;
             //check if player is holding object while leaving collider 
-            if(other.gameObject.GetComponentInChildren<extraGrav>())
+            if(other.gameObject.GetComponentInChildren<cube>())
             {
                 _otherContact = false;
             }
@@ -107,11 +110,11 @@ public class scalableObject : MonoBehaviour
         }
     }
 
-    IEnumerator playAudio(int thisCur)
+    IEnumerator playAudio()
     {
         _source.Play();
-        yield return new WaitForSeconds(0.2f);
-        StartCoroutine(FadeOut(0.2f));
+        yield return new WaitForSeconds(0.1f);
+        StartCoroutine(FadeOut(0.1f));
     }
     
     IEnumerator FadeOut(float fadeOutDuration)
@@ -129,22 +132,21 @@ public class scalableObject : MonoBehaviour
     }
 
     
-
-    private int _cur = 0;
+    
     public void ScaleUp(float boostForce, bool stop)
     {
         if (reverse && !stop)
         {
+            _source.pitch = 2f;
             ScaleDown(true);
             return;
         }
         
         if (transform.localScale.x < maxScale.x || transform.localScale.y < maxScale.y || transform.localScale.z < maxScale.z)
         {
-            _cur++;
             if (!_source.isPlaying)
             {
-                StartCoroutine(playAudio(_cur));
+                StartCoroutine(playAudio());
             }
             
             _col.enabled = true;
@@ -206,10 +208,10 @@ public class scalableObject : MonoBehaviour
         }
         if (transform.localScale.x > minScale.x || transform.localScale.y > minScale.y || transform.localScale.z > minScale.z)
         {
-            _cur++;
             if (!_source.isPlaying)
             {
-                StartCoroutine(playAudio(_cur));
+                _source.pitch = 1.5f;
+                StartCoroutine(playAudio());
             }
             Vector3 newScale = transform.localScale - scaleSpeed * Time.deltaTime;
             transform.localScale = new Vector3(

@@ -1,12 +1,10 @@
 
+#if (UNITY_EDITOR) 
+
 using System;
-using Unity.VisualScripting;
 using UnityEditor;
-using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.Serialization;
-using System.Reflection;
 
 /// <summary>
 /// Handles the duplication of the Rendered objects found in the RepeatingArea.cs script
@@ -252,4 +250,5 @@ public class RepeatingGridEditor : Editor
     }
 }
 
+#endif
 

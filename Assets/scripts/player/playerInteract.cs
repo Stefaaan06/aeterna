@@ -14,20 +14,18 @@ public class playerInteract : MonoBehaviour
     private void Update()
     {
         RaycastHit hit;
-        if(Physics.Raycast(cam.position, cam.forward, out hit, range, targetLayer))
+        if (Physics.Raycast(cam.position, cam.forward, out hit, range, targetLayer))
         {
             _target = hit.transform.gameObject;
-        }
+            if (Input.GetKeyDown(KeyCode.E))
+            {
 
-        if (_target == null) return;
-
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            _target.GetComponent<playerButton>().buttonPress();
-        }
-        else
-        {
-            _target.GetComponent<playerButton>().buttonHighlight();
+                _target.GetComponent<playerButton>().buttonPress();
+            }
+            else
+            {
+                _target.GetComponent<playerButton>().buttonHighlight();
+            }
         }
     }
 }

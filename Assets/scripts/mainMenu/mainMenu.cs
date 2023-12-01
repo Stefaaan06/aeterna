@@ -10,16 +10,26 @@ public class mainMenu : MonoBehaviour
     public mainMenuAnim anim;
 
     public AudioSource musicSource;
+
+    private int lvl = 1;
     public void StartGame()
     {
         fade.fadeToBlack();
         StartCoroutine(FadeOutMusic(1f));
         Invoke("start", 1f);
     }
-
+    
+    public void continuegame()
+    {
+        lvl = PlayerPrefs.GetInt("lvl");
+        fade.fadeToBlack();
+        StartCoroutine(FadeOutMusic(1f));
+        Invoke("start", 1f);
+    }
+    
     private void start()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        SceneManager.LoadScene(lvl);
     }
 
     IEnumerator FadeOutMusic(float fadeOutDuration)

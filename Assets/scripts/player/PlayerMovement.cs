@@ -52,6 +52,7 @@ public class PlayerMovement : MonoBehaviour {
     [SerializeField] GrapplingGun grappling;
     [SerializeField] private ObjectPickup objectPickup;
     [SerializeField] private playerFX playerFX;
+    public playerPauseMenu pauseMenu;
     void Start()
     {
         Cursor.visible = false;
@@ -86,7 +87,8 @@ public class PlayerMovement : MonoBehaviour {
     private void FixedUpdate() {
         Movement();
     }
-    void Update(){ 
+    void Update(){
+        if(pauseMenu.paused) return;
         CheckIfGrounded();
         MyInput();
         airTime();
@@ -207,6 +209,11 @@ public class PlayerMovement : MonoBehaviour {
         else
         {
             //Apply forces to move player
+            if (pauseMenu.paused)
+            {
+                moving = false;
+                return; 
+            }
             rb.AddForce(orientation.transform.forward * (y * moveSpeed * Time.deltaTime * multiplier * multiplierV));
             rb.AddForce(orientation.transform.right * (x * moveSpeed * Time.deltaTime * multiplier));   
         }

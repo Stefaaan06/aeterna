@@ -11,7 +11,7 @@ public class playerTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        
+        Debug.Log(Time.deltaTime);   
         if (other.CompareTag("player"))
         {
             Debug.Log("x");

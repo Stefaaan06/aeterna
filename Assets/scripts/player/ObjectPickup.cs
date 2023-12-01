@@ -18,6 +18,10 @@ public class ObjectPickup : MonoBehaviour {
     [Header("References")]
     [SerializeField] private PlayerMovement playerMovement;
 
+    [SerializeField] private AudioSource source;
+    [SerializeField] private AudioClip[] clips;
+    
+    
     private static GameObject _heldObj = null;
     private Rigidbody _heldObjRb;
     private Vector3 _scale;
@@ -35,9 +39,15 @@ public class ObjectPickup : MonoBehaviour {
                 RaycastHit hit;
                 //shoots Raycast to find Object within the PickupRange and having the correct layer
                 if(Physics.Raycast(cam.position, cam.forward, out hit, pickupRange, pickupLayer)){
+                    source.pitch = Random.Range(1.1f, 1.3f);
+                    source.PlayOneShot(clips[0], 0.8f);
+                    
                     PickupObject(hit.transform.gameObject); 
                 }
             }else{
+                source.pitch = Random.Range(0.7f, 0.9f);
+                source.PlayOneShot(clips[0], 0.8f);
+                
                 DropObject();
             }
         }
@@ -58,6 +68,8 @@ public class ObjectPickup : MonoBehaviour {
         _heldObjRb = pickObj.GetComponent<Rigidbody>();
         
         _boxCollider = _heldObj.GetComponent<BoxCollider>();
+     
+        _heldObjRb.AddForce(holdArea.position , ForceMode.Force);
         
         _heldObj.tag = "pickedUp";
         _heldObj.transform.parent = this.transform;

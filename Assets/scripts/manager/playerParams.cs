@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class playerParams : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class playerParams : MonoBehaviour
     public int farClipPlane = 7000;
     void Start()
     {
+        PlayerPrefs.SetInt("lvl", SceneManager.GetActiveScene().buildIndex);
         try
         {
             GameObject player = FindObjectOfType<PlayerMovement>().gameObject;

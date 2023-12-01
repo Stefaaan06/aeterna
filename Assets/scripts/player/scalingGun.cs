@@ -12,7 +12,7 @@ public class scalingGun : MonoBehaviour
     public Camera cam;
 
     private scalableObject[] scalableObjects;
-
+    public AudioSource src;
     private void Start()
     {
         findScalables();
@@ -22,7 +22,8 @@ public class scalingGun : MonoBehaviour
     {
         scalableObjects = FindObjectsOfType<scalableObject>();
     }
-    
+
+    private bool play;
     void Update()
     {
         if (Input.GetButton("Fire1"))
@@ -30,14 +31,45 @@ public class scalingGun : MonoBehaviour
             foreach (scalableObject scalable in scalableObjects)
             {
                 scalable.ScaleUp(25, false);
+                if (!src.isPlaying)
+                {
+                    play = true;
+                    src.Play();
+                }
             }
         }else if (Input.GetButton("Fire2"))
         {
             foreach (scalableObject scalable in scalableObjects)
             {
                 scalable.ScaleDown(false);
+                if (!src.isPlaying)
+                {
+                    play = true;
+                    src.Play();
+                };
+            }
+        }else
+        {
+            if (play)
+            {
+                play = false;
+                StartCoroutine(FadeOut());
             }
         }
+    }
+    
+    IEnumerator FadeOut()
+    {
+        float startVolume = src.volume;
+
+        while (src.volume > 0)
+        {
+            src.volume -= startVolume * Time.deltaTime / 0.2f;
+            yield return null;
+        }
+
+        src.Pause();
+        src.volume = 1;
     }
     
     private void OnEnable()

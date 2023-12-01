@@ -22,8 +22,11 @@ public class playerFX : MonoBehaviour
     
     [SerializeField] private float baseStepSpeed = 0.5f;
 
+    private bool cameraShake;
     private void Start()
     {
+        cameraShake = PlayerPrefs.GetInt("cameraShake") == 0;
+        
         if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("Level 1"))
         {
             fadeToNormalLong();
@@ -66,7 +69,10 @@ public class playerFX : MonoBehaviour
     public void Jump()
     {
         source.PlayOneShot(walkClips[UnityEngine.Random.Range(0, 10 - 1)], 0.7f);
-        CameraShaker.CameraShaker.Instance.ShakeOnce(1.2f, 1.2f, 0.2f, 0.5f);
+        if (cameraShake)
+        {
+            CameraShaker.CameraShaker.Instance.ShakeOnce(1.2f, 1.2f, 0.2f, 0.5f);
+        }
     }
 
     private float footstepsTimer = 0;
@@ -80,7 +86,10 @@ public class playerFX : MonoBehaviour
                     source.pitch = UnityEngine.Random.Range(0.8f, 1.1f);
                     source.PlayOneShot(walkClips[UnityEngine.Random.Range(0, 10 - 1)], 0.3f);
                     footstepsTimer = baseStepSpeed;
-                    CameraShaker.CameraShaker.Instance.ShakeOnce(1f, 1, 0.2f, 1f);
+                    if (cameraShake)
+                    {
+                        CameraShaker.CameraShaker.Instance.ShakeOnce(1f, 1, 0.2f, 1f);
+                    }
                 }
             }
         }
@@ -120,12 +129,18 @@ public class playerFX : MonoBehaviour
             if (player.velocity.magnitude > 35) 
             {
                 source.pitch = UnityEngine.Random.Range(0.5f , 0.8f);
-                CameraShaker.CameraShaker.Instance.ShakeOnce(_velocity / 18, _velocity / 15, 0.1f, 0.2f); 
+                if (cameraShake)
+                {
+                    CameraShaker.CameraShaker.Instance.ShakeOnce(_velocity / 18, _velocity / 15, 0.1f, 0.2f);
+                }
             }
             else
             {
                 source.pitch = UnityEngine.Random.Range(0.8f , 1.1f);
-                CameraShaker.CameraShaker.Instance.ShakeOnce(1.2f, 1, 0.1f, 0.1f); 
+                if (cameraShake)
+                {
+                    CameraShaker.CameraShaker.Instance.ShakeOnce(1.2f, 1, 0.1f, 0.1f);
+                }
             }
             source.PlayOneShot(walkClips[UnityEngine.Random.Range(0, 10 - 1)], _velocity / 35);
         }
@@ -133,6 +148,7 @@ public class playerFX : MonoBehaviour
 
     public void shakeEarthquake()
     {
+
         CameraShaker.CameraShaker.Instance.Shake(CameraShaker.CameraShakePresets.Earthquake);
     }
     public void fadeToNormalLong()
