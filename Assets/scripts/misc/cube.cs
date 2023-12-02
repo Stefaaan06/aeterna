@@ -47,8 +47,8 @@ public class cube : MonoBehaviour
         }
     }
 
-
-    void Update()
+    
+    void FixedUpdate()
     {
         if (maxSpeed < _rb.velocity.magnitude)
         {
@@ -58,11 +58,8 @@ public class cube : MonoBehaviour
         {
             _rb.AddForce(Vector3.down * (Time.deltaTime * extraGravityStrength));
         }
-       
     }
     
-   
-
     void OnCollisionEnter(Collision collision){    
         if (IsActionAvailable())   
         {
