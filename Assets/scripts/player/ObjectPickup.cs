@@ -68,8 +68,15 @@ public class ObjectPickup : MonoBehaviour {
         _heldObjRb = pickObj.GetComponent<Rigidbody>();
         
         _boxCollider = _heldObj.GetComponent<BoxCollider>();
-     
-        _heldObjRb.AddForce(holdArea.position , ForceMode.Force);
+
+        if (raycast())
+        {
+            _heldObjRb.AddForce(holdArea.position * pickupForce , ForceMode.Force);
+        }
+        else
+        {
+            _heldObj.transform.position = holdArea.transform.position;
+        }
         
         _heldObj.tag = "pickedUp";
         _heldObj.transform.parent = this.transform;
@@ -95,6 +102,19 @@ public class ObjectPickup : MonoBehaviour {
         _heldObjRb = null;
     }
 
+    RaycastHit hit;
+    bool raycast()
+    {
+        float moveDistance = Vector3.Distance(holdArea.position, _heldObj.transform.position);
+        Vector3 moveDirection = (holdArea.position - _heldObj.transform.position);
+        
+        if(Physics.Raycast(_heldObj.transform.position, moveDirection, out hit, moveDistance * 4, ground))
+        {
+            return true;
+        }
+        return false;
+    }
+    
     public LayerMask ground;
     private BoxCollider _boxCollider;
     private List<Collider> otherColliders = new List<Collider>();
@@ -110,14 +130,15 @@ public class ObjectPickup : MonoBehaviour {
 
         Vector3 moveDirection = (holdArea.position - _heldObj.transform.position);
         
-        RaycastHit hit;
-        if (Physics.Raycast(_heldObj.transform.position, moveDirection, out hit, moveDistance * 4, ground))
+        bool raycastHit = raycast();
+        if (raycastHit)
         {
             Vector3 nearestPoint = hit.collider.ClosestPoint(hit.point);
             moveDirection = (nearestPoint - _heldObj.transform.position);
             _heldObjRb.AddForce(moveDirection * pickupForce, ForceMode.Acceleration);
             return;
         }
+        
         
         Collider[] col = Physics.OverlapBox(_heldObj.transform.position + _boxCollider.center, _boxCollider.size / 2, Quaternion.identity, ground);
     
@@ -132,12 +153,12 @@ public class ObjectPickup : MonoBehaviour {
 
         if (otherColliders.Count > 0)
         {
-            Vector3 nearestPoint = otherColliders[0].ClosestPoint(holdArea.position);
             
-            moveDirection = (nearestPoint - _heldObj.transform.position);
+            moveDirection = (holdArea.position - _heldObj.transform.position);
             _heldObjRb.AddForce(moveDirection * pickupForce, ForceMode.Force);
             return;
         }
+        
         _heldObj.transform.position = holdArea.position;
     }
 

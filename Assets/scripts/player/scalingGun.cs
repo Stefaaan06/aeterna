@@ -26,7 +26,7 @@ public class scalingGun : MonoBehaviour
     private bool play;
     void Update()
     {
-        if (Input.GetButton("Fire1"))
+        if (Input.GetButton("Fire1") || Input.GetKey(KeyCode.X))
         { 
             foreach (scalableObject scalable in scalableObjects)
             {
@@ -34,10 +34,11 @@ public class scalingGun : MonoBehaviour
                 if (!src.isPlaying)
                 {
                     play = true;
+                    src.pitch = 1.3f;
                     src.Play();
                 }
             }
-        }else if (Input.GetButton("Fire2"))
+        }else if (Input.GetButton("Fire2") || Input.GetKey(KeyCode.C))
         {
             foreach (scalableObject scalable in scalableObjects)
             {
@@ -45,6 +46,7 @@ public class scalingGun : MonoBehaviour
                 if (!src.isPlaying)
                 {
                     play = true;
+                    src.pitch = 0.7f;
                     src.Play();
                 };
             }
