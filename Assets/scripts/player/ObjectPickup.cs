@@ -51,10 +51,13 @@ public class ObjectPickup : MonoBehaviour {
                 DropObject();
             }
         }
+        
         if(_heldObj == null) return;
+        
         rotateObject();
         MoveObject();
     }
+    
     
     
 
@@ -78,6 +81,8 @@ public class ObjectPickup : MonoBehaviour {
             _heldObj.transform.position = holdArea.transform.position;
         }
         
+        _heldObj.GetComponent<cube>().enabled = false;
+        
         _heldObj.tag = "pickedUp";
         _heldObj.transform.parent = this.transform;
         
@@ -98,6 +103,8 @@ public class ObjectPickup : MonoBehaviour {
         _heldObjRb.angularDrag = _prevAngularDrag;
         _heldObjRb.useGravity = true;
         
+        _heldObj.GetComponent<cube>().enabled = true;
+        
         _heldObj = null;
         _heldObjRb = null;
     }
@@ -105,10 +112,7 @@ public class ObjectPickup : MonoBehaviour {
     RaycastHit hit;
     bool raycast()
     {
-        float moveDistance = Vector3.Distance(holdArea.position, _heldObj.transform.position);
-        Vector3 moveDirection = (holdArea.position - _heldObj.transform.position);
-        
-        if(Physics.Raycast(_heldObj.transform.position, moveDirection, out hit, moveDistance * 4, ground))
+        if(Physics.Raycast(cam.position, cam.transform.forward, out hit, 10,ground))
         {
             return true;
         }
@@ -129,19 +133,19 @@ public class ObjectPickup : MonoBehaviour {
         }
 
         Vector3 moveDirection = (holdArea.position - _heldObj.transform.position);
-        
+
         bool raycastHit = raycast();
         if (raycastHit)
         {
             Vector3 nearestPoint = hit.collider.ClosestPoint(hit.point);
             moveDirection = (nearestPoint - _heldObj.transform.position);
-            _heldObjRb.AddForce(moveDirection * pickupForce, ForceMode.Acceleration);
+            _heldObjRb.AddForce(moveDirection * pickupForce * 100 * Time.deltaTime, ForceMode.Acceleration);
+            Debug.Log("1");
             return;
         }
-        
-        
+
         Collider[] col = Physics.OverlapBox(_heldObj.transform.position + _boxCollider.center, _boxCollider.size / 2, Quaternion.identity, ground);
-    
+
         otherColliders.Clear();
         foreach (Collider c in col)
         {
@@ -153,14 +157,18 @@ public class ObjectPickup : MonoBehaviour {
 
         if (otherColliders.Count > 0)
         {
-            
             moveDirection = (holdArea.position - _heldObj.transform.position);
-            _heldObjRb.AddForce(moveDirection * pickupForce, ForceMode.Force);
+            _heldObjRb.AddForce(moveDirection * pickupForce * 100 * Time.deltaTime, ForceMode.Acceleration);
+            Debug.Log("2");
+
             return;
         }
-        
+
         _heldObj.transform.position = holdArea.position;
+        Debug.Log("3");
+
     }
+
 
     
     void rotateObject()
