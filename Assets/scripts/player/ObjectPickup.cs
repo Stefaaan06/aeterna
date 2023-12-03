@@ -72,18 +72,13 @@ public class ObjectPickup : MonoBehaviour {
         
         _boxCollider = _heldObj.GetComponent<BoxCollider>();
 
-        if (raycast())
-        {
-            _heldObjRb.AddForce(holdArea.position * pickupForce , ForceMode.Force);
-        }
-        else
-        {
-            _heldObj.transform.position = holdArea.transform.position;
-        }
+
         
         _heldObj.GetComponent<cube>().enabled = false;
         
+        _heldObj.layer = 11;
         _heldObj.tag = "pickedUp";
+
         _heldObj.transform.parent = this.transform;
         
         _prevDrag = _heldObjRb.drag;
@@ -96,13 +91,15 @@ public class ObjectPickup : MonoBehaviour {
     
     public void DropObject(){  
         if(_heldObj == null || _heldObjRb == null) { return; }
-        _heldObj.tag = "repeat";
         _heldObj.transform.parent = null;
         
         _heldObjRb.drag = _prevDrag;
         _heldObjRb.angularDrag = _prevAngularDrag;
         _heldObjRb.useGravity = true;
         
+        _heldObj.layer = 9;
+        _heldObj.tag = "repeat";
+
         _heldObj.GetComponent<cube>().enabled = true;
         
         _heldObj = null;

@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 public class cube : MonoBehaviour
 {
     public int extraGravityStrength = 10;
-    public int maxSpeed = 50;
+    public int maxSpeed = 60;
     private Rigidbody _rb;
     
     AudioSource _source;  
