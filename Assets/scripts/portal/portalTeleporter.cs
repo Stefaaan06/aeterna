@@ -39,9 +39,7 @@ public class portalTeleporter : MonoBehaviour
                 thisCol.enabled = true;
             }
         }
-    }
-
-    void Update () {
+        
         if (_playerIsOverlapping && !_teleported && _playerMovement.moving)
         {
             backCol.enabled = false;
@@ -49,17 +47,17 @@ public class portalTeleporter : MonoBehaviour
             float dotProduct = Vector3.Dot(transform.forward, portalToPlayer);
 
 
-                float rotationDiff = -Quaternion.Angle(transform.rotation, recieverTransform.rotation);
-                _playerTransform.Rotate(Vector3.up, rotationDiff);
+            float rotationDiff = -Quaternion.Angle(transform.rotation, recieverTransform.rotation);
+            _playerTransform.Rotate(Vector3.up, rotationDiff);
                 
                 
-                Vector3 positionOffset = Quaternion.Euler(0f, rotationDiff, 0f) * portalToPlayer;
-                _playerTransform.position = recieverTransform.position + positionOffset;
+            Vector3 positionOffset = Quaternion.Euler(0f, rotationDiff, 0f) * portalToPlayer;
+            _playerTransform.position = recieverTransform.position + positionOffset;
 
-                _playerIsOverlapping = false;
-                _teleported = true;
-                otherCol.enabled = false;
-                thisCol.enabled = false;
+            _playerIsOverlapping = false;
+            _teleported = true;
+            otherCol.enabled = false;
+            thisCol.enabled = false;
             
         }
         else
@@ -67,6 +65,7 @@ public class portalTeleporter : MonoBehaviour
             backCol.enabled = true;
         }
     }
+    
 
     void OnTriggerEnter (Collider other)
     {

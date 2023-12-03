@@ -179,7 +179,7 @@ public class scalableObject : MonoBehaviour
                     scaleSpeed.z != 0 ? relativePosition.z : 0
                 );
 
-                _otherRb.AddForce(boostForceVector.normalized * boostForce * playerBoost, ForceMode.Impulse);
+                _otherRb.AddForce(boostForceVector.normalized * (boostForce * playerBoost), ForceMode.Impulse);
             }
             
             Vector3 newScale = transform.localScale + scaleSpeed * Time.deltaTime;
