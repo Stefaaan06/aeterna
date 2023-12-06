@@ -71,8 +71,6 @@ public class ObjectPickup : MonoBehaviour {
         _heldObjRb = pickObj.GetComponent<Rigidbody>();
         
         _boxCollider = _heldObj.GetComponent<BoxCollider>();
-
-
         
         _heldObj.GetComponent<cube>().enabled = false;
         
@@ -121,7 +119,7 @@ public class ObjectPickup : MonoBehaviour {
     private List<Collider> otherColliders = new List<Collider>();
     void MoveObject()
     {
-        float moveDistance = Vector3.Distance(holdArea.position, _heldObj.transform.position);
+        float moveDistance = Vector3.Distance(holdArea.localPosition, _heldObj.transform.localPosition);
 
         if (moveDistance > pickupRange)
         {
@@ -137,7 +135,6 @@ public class ObjectPickup : MonoBehaviour {
             Vector3 nearestPoint = hit.collider.ClosestPoint(hit.point);
             moveDirection = (nearestPoint - _heldObj.transform.position);
             _heldObjRb.AddForce(moveDirection * pickupForce * 100 * Time.deltaTime, ForceMode.Acceleration);
-            Debug.Log("1");
             return;
         }
 
@@ -156,13 +153,11 @@ public class ObjectPickup : MonoBehaviour {
         {
             moveDirection = (holdArea.position - _heldObj.transform.position);
             _heldObjRb.AddForce(moveDirection * pickupForce * 100 * Time.deltaTime, ForceMode.Acceleration);
-            Debug.Log("2");
 
             return;
         }
 
         _heldObj.transform.position = holdArea.position;
-        Debug.Log("3");
 
     }
 

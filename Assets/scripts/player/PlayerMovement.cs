@@ -165,7 +165,7 @@ public class PlayerMovement : MonoBehaviour {
             rb.velocity = rb.velocity.normalized * maxRbSpeed;
         }
         
-       // If sliding down a ramp, add force down so player stays grounded and also builds speed
+        // If sliding down a ramp, add force down so player stays grounded and also builds speed
         if (crouching && grounded && _readyToJump) {
            rb.AddForce(Vector3.down * (Time.deltaTime * 1000)); //CHANGES HERE
         }

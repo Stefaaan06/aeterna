@@ -56,7 +56,7 @@ public class cube : MonoBehaviour
         }
         else
         {
-            _rb.AddForce(Vector3.down * (Time.deltaTime * extraGravityStrength));
+            //_rb.AddForce(Vector3.down * (Time.deltaTime * extraGravityStrength));
         }
     }
     
