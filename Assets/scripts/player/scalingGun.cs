@@ -24,7 +24,7 @@ public class scalingGun : MonoBehaviour
     }
 
     private bool play;
-    void Update()
+    void FixedUpdate()
     {
         if (Input.GetButton("Fire1") || Input.GetKey(KeyCode.X))
         { 
