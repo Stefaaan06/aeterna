@@ -22,6 +22,8 @@ public class cube : MonoBehaviour
     {
         startIndex = SceneManager.GetActiveScene().buildIndex;
         _rb = GetComponent<Rigidbody>();
+        _rb.interpolation = RigidbodyInterpolation.Extrapolate;
+        _rb.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
     }
     
     void Start()
@@ -48,7 +50,7 @@ public class cube : MonoBehaviour
     }
 
     
-    void FixedUpdate()
+    void LateUpdate()
     {
         if (maxSpeed < _rb.velocity.magnitude)
         {
@@ -56,7 +58,7 @@ public class cube : MonoBehaviour
         }
         else
         {
-            //_rb.AddForce(Vector3.down * (Time.deltaTime * extraGravityStrength));
+            _rb.AddForce(Vector3.down * (Time.deltaTime * extraGravityStrength));
         }
     }
     

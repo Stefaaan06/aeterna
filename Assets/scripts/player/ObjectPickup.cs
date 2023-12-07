@@ -31,6 +31,8 @@ public class ObjectPickup : MonoBehaviour {
     [SerializeField] private float pickupRange;
     [SerializeField] private float pickupForce;
     
+    private bool _pickedUp = false;
+    
 
     float _objMass;
     private void Update(){
@@ -43,17 +45,18 @@ public class ObjectPickup : MonoBehaviour {
                     source.PlayOneShot(clips[0], 0.8f);
                     
                     PickupObject(hit.transform.gameObject); 
+                    return;
                 }
             }else{
                 source.pitch = Random.Range(0.7f, 0.9f);
                 source.PlayOneShot(clips[0], 0.8f);
                 
                 DropObject();
+                return;
             }
         }
         
-        if(_heldObj == null) return;
-        
+        if(!_pickedUp) return;
         rotateObject();
         MoveObject();
     }
@@ -65,6 +68,7 @@ public class ObjectPickup : MonoBehaviour {
     private float _prevDrag;
     void PickupObject(GameObject pickObj)
     {
+        _pickedUp = true;
         EventManager.Instance.invokePickupEventGlobal(); // event for scalableObject.cs
         
         _heldObj = pickObj;
@@ -72,7 +76,7 @@ public class ObjectPickup : MonoBehaviour {
         
         _boxCollider = _heldObj.GetComponent<BoxCollider>();
         
-        _heldObj.GetComponent<cube>().enabled = false;
+       _heldObj.GetComponent<cube>().enabled = false;
         
         _heldObj.layer = 11;
         _heldObj.tag = "pickedUp";
@@ -88,7 +92,8 @@ public class ObjectPickup : MonoBehaviour {
     }
     
     public void DropObject(){  
-        if(_heldObj == null || _heldObjRb == null) { return; }
+        if(!_pickedUp) { return; }
+        _pickedUp = false;
         _heldObj.transform.parent = null;
         
         _heldObjRb.drag = _prevDrag;
@@ -98,7 +103,7 @@ public class ObjectPickup : MonoBehaviour {
         _heldObj.layer = 9;
         _heldObj.tag = "repeat";
 
-        _heldObj.GetComponent<cube>().enabled = true;
+       _heldObj.GetComponent<cube>().enabled = true;
         
         _heldObj = null;
         _heldObjRb = null;
@@ -120,13 +125,13 @@ public class ObjectPickup : MonoBehaviour {
     void MoveObject()
     {
         float moveDistance = Vector3.Distance(holdArea.localPosition, _heldObj.transform.localPosition);
-
+        
         if (moveDistance > pickupRange)
         {
             DropObject();
             return;
         }
-
+        
         Vector3 moveDirection = (holdArea.position - _heldObj.transform.position);
 
         bool raycastHit = raycast();
@@ -134,7 +139,7 @@ public class ObjectPickup : MonoBehaviour {
         {
             Vector3 nearestPoint = hit.collider.ClosestPoint(hit.point);
             moveDirection = (nearestPoint - _heldObj.transform.position);
-            _heldObjRb.AddForce(moveDirection * pickupForce * 100 * Time.deltaTime, ForceMode.Acceleration);
+            _heldObjRb.AddForce(moveDirection * (pickupForce * 100 * Time.deltaTime), ForceMode.Acceleration);
             return;
         }
 
@@ -152,13 +157,12 @@ public class ObjectPickup : MonoBehaviour {
         if (otherColliders.Count > 0)
         {
             moveDirection = (holdArea.position - _heldObj.transform.position);
-            _heldObjRb.AddForce(moveDirection * pickupForce * 100 * Time.deltaTime, ForceMode.Acceleration);
+            _heldObjRb.AddForce(moveDirection * (pickupForce * 100 * Time.deltaTime), ForceMode.Acceleration);
 
             return;
         }
-
-        _heldObj.transform.position = holdArea.position;
-
+        
+        _heldObjRb.MovePosition(holdArea.position);
     }
 
 
@@ -169,15 +173,13 @@ public class ObjectPickup : MonoBehaviour {
         {
             Vector3 rotationEulerAngles = _heldObjRb.transform.rotation.eulerAngles;
 
-            // Round the angles to the nearest multiple of 90 degrees
             rotationEulerAngles.x = Mathf.Round(rotationEulerAngles.x / 90) * 90;
             rotationEulerAngles.y = Mathf.Round(rotationEulerAngles.y / 90) * 90;
             rotationEulerAngles.z = Mathf.Round(rotationEulerAngles.z / 90) * 90;
 
-            // Smoothly interpolate between the current rotation and the target rotation
             Quaternion targetRotation = Quaternion.Euler(rotationEulerAngles);
-            float rotationSpeed = 25f; // Adjust the rotation speed as needed
-            _heldObjRb.MoveRotation(Quaternion.Lerp(_heldObjRb.rotation, targetRotation, Time.deltaTime * rotationSpeed));
+
+            _heldObjRb.MoveRotation(Quaternion.Lerp(_heldObjRb.rotation, targetRotation,  25));
         }
     }
 } 
