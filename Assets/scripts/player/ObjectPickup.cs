@@ -60,9 +60,6 @@ public class ObjectPickup : MonoBehaviour {
         rotateObject();
         MoveObject();
     }
-    
-    
-    
 
     float _prevAngularDrag;
     private float _prevDrag;
@@ -104,9 +101,19 @@ public class ObjectPickup : MonoBehaviour {
         _heldObj.tag = "repeat";
 
        _heldObj.GetComponent<cube>().enabled = true;
-        
+       
+       _prevRb = _heldObjRb;
+       _heldObjRb.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+       Invoke("resetCollisionDetectionMode", 2f);
+       
         _heldObj = null;
         _heldObjRb = null;
+    }
+    
+    private Rigidbody _prevRb;
+    void resetCollisionDetectionMode()
+    {
+        _prevRb.collisionDetectionMode = CollisionDetectionMode.Discrete;
     }
 
     RaycastHit hit;

@@ -197,8 +197,8 @@ public class scalableObject : MonoBehaviour
                 );
             }
         }
-    }
-    
+    }           
+        
     public void ScaleDown(bool stop)
     {
         if (reverse && !stop)

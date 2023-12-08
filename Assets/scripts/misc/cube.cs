@@ -23,7 +23,6 @@ public class cube : MonoBehaviour
         startIndex = SceneManager.GetActiveScene().buildIndex;
         _rb = GetComponent<Rigidbody>();
         _rb.interpolation = RigidbodyInterpolation.Extrapolate;
-        _rb.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
     }
     
     void Start()
