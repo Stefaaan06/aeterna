@@ -21,8 +21,7 @@ Developer: [Stefaaan](https://twitter.com/Stefaaan06)
   
 [Wishlist my game on steam](https://store.steampowered.com/news/app/2547010/view/3676680576869832935)
     
-If you encounter any issues or have feedback, feel free to reach out to me on Twitter or open a issue (Twitter is preferred).
-
+If you encounter any issues or have feedback, feel free to reach out to me on Twitter or open a issue.
 # Legal Details
 
 This project is licensed under the terms of the [Apache License 2.0](https://opensource.org/licenses/Apache-2.0) - see the [LICENSE](LICENSE) file for details.
