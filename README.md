@@ -1,6 +1,7 @@
 # Aeterna - GithubGameOff2023
 
 This is a repo for my game jam submission "Aeterna" for the [Github Gameoff 2023](https://itch.io/jam/game-off-2023).
+Placed 26 in graphics and 57 overall out of 600+ submission.
 
 # About the Game
 A non-euclidean 🧩 puzzle-parkour game set in an infinite world.
