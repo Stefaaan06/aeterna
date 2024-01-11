@@ -4,7 +4,7 @@ This is a repo for my game jam submission "Aeterna" for the [Github Gameoff 2023
 Placed 26 in graphics and 57 overall out of 630+ submission.
 
 # About the Game
-A non-euclidean 🧩 puzzle-parkour game set in an infinite world.
+A non-euclidean puzzle-parkour game set in an infinite world.
 
 [Play the Game here](https://stefaaan06.itch.io/aeterna)
 
