@@ -80,11 +80,11 @@ public class ObjectPickup : MonoBehaviour {
 
         _heldObj.transform.parent = this.transform;
         
-        _prevDrag = _heldObjRb.drag;
-        _prevAngularDrag = _heldObjRb.angularDrag;
+        _prevDrag = _heldObjRb.linearDamping;
+        _prevAngularDrag = _heldObjRb.angularDamping;
          
-        _heldObjRb.drag = 2;
-        _heldObjRb.angularDrag = 1;
+        _heldObjRb.linearDamping = 2;
+        _heldObjRb.angularDamping = 1;
         _heldObjRb.useGravity = false;
     }
     
@@ -93,8 +93,8 @@ public class ObjectPickup : MonoBehaviour {
         _pickedUp = false;
         _heldObj.transform.parent = null;
         
-        _heldObjRb.drag = _prevDrag;
-        _heldObjRb.angularDrag = _prevAngularDrag;
+        _heldObjRb.linearDamping = _prevDrag;
+        _heldObjRb.angularDamping = _prevAngularDrag;
         _heldObjRb.useGravity = true;
         
         _heldObj.layer = 9;

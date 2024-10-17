@@ -51,9 +51,9 @@ public class cube : MonoBehaviour
     
     void LateUpdate()
     {
-        if (maxSpeed < _rb.velocity.magnitude)
+        if (maxSpeed < _rb.linearVelocity.magnitude)
         {
-            _rb.velocity = _rb.velocity.normalized * maxSpeed;
+            _rb.linearVelocity = _rb.linearVelocity.normalized * maxSpeed;
         }
         else
         {

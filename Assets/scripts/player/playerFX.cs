@@ -47,11 +47,11 @@ public class playerFX : MonoBehaviour
     {
         float targetVolume = 0.2f; 
 
-        if (player.velocity.magnitude > 35 && !fallSource.isPlaying)
+        if (player.linearVelocity.magnitude > 35 && !fallSource.isPlaying)
         {
             fallSource.Play();
         }
-        else if (fallSource.isPlaying && player.velocity.magnitude < 35)
+        else if (fallSource.isPlaying && player.linearVelocity.magnitude < 35)
         {
             fallSource.volume = Mathf.Lerp(fallSource.volume, 0.0f, Time.deltaTime * 4);
         
@@ -126,7 +126,7 @@ public class playerFX : MonoBehaviour
         if (_hitColliders == null) return;
         foreach (var hitCollider in _hitColliders)
         {
-            if (player.velocity.magnitude > 35) 
+            if (player.linearVelocity.magnitude > 35) 
             {
                 source.pitch = UnityEngine.Random.Range(0.5f , 0.8f);
                 if (cameraShake)

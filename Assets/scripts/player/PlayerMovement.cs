@@ -100,7 +100,7 @@ public class PlayerMovement : MonoBehaviour {
     {
         x = Input.GetAxisRaw("Horizontal");
         y = Input.GetAxisRaw("Vertical");
-        if (rb.velocity.magnitude > 1)
+        if (rb.linearVelocity.magnitude > 1)
         {
             moving = true;
         }
@@ -131,11 +131,11 @@ public class PlayerMovement : MonoBehaviour {
             rb.AddForce(Vector2.up * (jumpForce * 1.5f));
             rb.AddForce(Vector3.up * (jumpForce * 0.5f));
             
-            Vector3 vel = rb.velocity;
-            if (rb.velocity.y < 0.5f)
-                rb.velocity = new Vector3(vel.x, 0, vel.z);
-            else if (rb.velocity.y > 0) 
-                rb.velocity = new Vector3(vel.x, vel.y / 2, vel.z);           
+            Vector3 vel = rb.linearVelocity;
+            if (rb.linearVelocity.y < 0.5f)
+                rb.linearVelocity = new Vector3(vel.x, 0, vel.z);
+            else if (rb.linearVelocity.y > 0) 
+                rb.linearVelocity = new Vector3(vel.x, vel.y / 2, vel.z);           
             
             Invoke(nameof(ResetJump), _jumpCooldown);
         }
@@ -160,9 +160,9 @@ public class PlayerMovement : MonoBehaviour {
         CounterMovement(x, y, mag);
         //Set max speed
         float maxSpeed = this.maxSpeed;
-        if (rb.velocity.magnitude > maxRbSpeed)
+        if (rb.linearVelocity.magnitude > maxRbSpeed)
         {
-            rb.velocity = rb.velocity.normalized * maxRbSpeed;
+            rb.linearVelocity = rb.linearVelocity.normalized * maxRbSpeed;
         }
         
         // If sliding down a ramp, add force down so player stays grounded and also builds speed
@@ -196,7 +196,7 @@ public class PlayerMovement : MonoBehaviour {
             multiplierV = 1f;
         }
 
-        if (rb.velocity.magnitude > maxSpeed)
+        if (rb.linearVelocity.magnitude > maxSpeed)
         {
             multiplier = 0.5f;
             multiplierV = 0.5f;
@@ -246,7 +246,7 @@ public class PlayerMovement : MonoBehaviour {
 
         //Slow down sliding
         if (crouching) {
-           rb.AddForce(-rb.velocity.normalized * (moveSpeed * Time.deltaTime * slideCounterMovement));
+           rb.AddForce(-rb.linearVelocity.normalized * (moveSpeed * Time.deltaTime * slideCounterMovement));
             return;
         }
 
@@ -259,20 +259,20 @@ public class PlayerMovement : MonoBehaviour {
         }
         
         //Limit diagonal running. This will also cause a full stop if sliding fast and un-crouching, so not optimal.
-        if (Mathf.Sqrt((Mathf.Pow(rb.velocity.x, 2) + Mathf.Pow(rb.velocity.z, 2))) > maxSpeed) {
-            float fallspeed = rb.velocity.y;
-            Vector3 n = rb.velocity.normalized * maxSpeed;
-            rb.velocity = new Vector3(n.x, fallspeed, n.z);
+        if (Mathf.Sqrt((Mathf.Pow(rb.linearVelocity.x, 2) + Mathf.Pow(rb.linearVelocity.z, 2))) > maxSpeed) {
+            float fallspeed = rb.linearVelocity.y;
+            Vector3 n = rb.linearVelocity.normalized * maxSpeed;
+            rb.linearVelocity = new Vector3(n.x, fallspeed, n.z);
         }
     }
     public Vector2 FindVelRelativeToLook() {
         float lookAngle = orientation.transform.eulerAngles.y;
-        float moveAngle = Mathf.Atan2(rb.velocity.x, rb.velocity.z) * Mathf.Rad2Deg;
+        float moveAngle = Mathf.Atan2(rb.linearVelocity.x, rb.linearVelocity.z) * Mathf.Rad2Deg;
 
         float u = Mathf.DeltaAngle(lookAngle, moveAngle);
         float v = 90 - u;
 
-        float magnitue = rb.velocity.magnitude;
+        float magnitue = rb.linearVelocity.magnitude;
         float yMag = magnitue * Mathf.Cos(u * Mathf.Deg2Rad);
         float xMag = magnitue * Mathf.Cos(v * Mathf.Deg2Rad);
         
