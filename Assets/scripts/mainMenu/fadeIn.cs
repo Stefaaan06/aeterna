@@ -17,13 +17,13 @@ public class fadeIn : MonoBehaviour
     public void fadeToBlack()
     {
         StopAllCoroutines();
-        StartCoroutine(FadePanel(1, 1f)); 
+        StartCoroutine(FadePanel(1.5f, 1f)); 
     }
     
     public void fadeToNormal()
     {
         StopAllCoroutines();
-        StartCoroutine(FadePanel(8, 0f)); 
+        StartCoroutine(FadePanel(4, 0f)); 
     }
     
     private IEnumerator FadePanel(float duration, float targetAlpha)

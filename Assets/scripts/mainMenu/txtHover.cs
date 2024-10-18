@@ -18,7 +18,6 @@ public class txtHover : MonoBehaviour
 
     private void Start()
     {
-        
         _sfx = FindObjectOfType<mainMenuSFX>();
         
         EventTrigger eventTrigger = gameObject.GetComponent<EventTrigger>();
@@ -75,7 +74,7 @@ public class txtHover : MonoBehaviour
 
         while (!Mathf.Approximately(currentAlpha, targetAlpha))
         {
-            currentAlpha = Mathf.MoveTowards(currentAlpha, targetAlpha, fadeSpeed * Time.deltaTime);
+            currentAlpha = Mathf.MoveTowards(currentAlpha, targetAlpha, fadeSpeed * Time.unscaledDeltaTime);
             Color newColor = panel.color;
             newColor.a = currentAlpha;
             panel.color = newColor;

@@ -11,20 +11,20 @@ public class mainMenu : MonoBehaviour
 
     public AudioSource musicSource;
 
-    private int lvl = 1;
+    private int lvl = 2;
     public void StartGame()
     {
         fade.fadeToBlack();
-        StartCoroutine(FadeOutMusic(1f));
-        Invoke("start", 1f);
+        StartCoroutine(FadeOutMusic(1.5f));
+        Invoke("start", 1.5f);
     }
     
     public void continuegame()
     {
         lvl = PlayerPrefs.GetInt("lvl");
         fade.fadeToBlack();
-        StartCoroutine(FadeOutMusic(1f));
-        Invoke("start", 1f);
+        StartCoroutine(FadeOutMusic(1.5f));
+        Invoke("start", 1.5f);
     }
     
     private void start()

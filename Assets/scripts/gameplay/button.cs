@@ -9,6 +9,7 @@ public class button : MonoBehaviour
 {
     public UnityEvent onEnterEvent; 
     public UnityEvent onExitEvent;
+    bool once = false;
 
     private bool _enter;
     private void OnTriggerStay(Collider other)
@@ -17,6 +18,10 @@ public class button : MonoBehaviour
         {
             onEnterEvent.Invoke();
             _enter = true;
+            if(once)
+            {
+                gameObject.GetComponent<button>().enabled = false;
+            }
         }
     }
     

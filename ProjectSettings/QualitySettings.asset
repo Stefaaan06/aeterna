@@ -4,9 +4,9 @@
 QualitySettings:
   m_ObjectHideFlags: 0
   serializedVersion: 5
-  m_CurrentQuality: 1
+  m_CurrentQuality: 2
   m_QualitySettings:
-  - serializedVersion: 3
+  - serializedVersion: 4
     name: Low
     pixelLightCount: 0
     shadows: 0
@@ -28,8 +28,11 @@ QualitySettings:
     realtimeReflectionProbes: 0
     billboardsFaceCameraPosition: 0
     useLegacyDetailDistribution: 1
+    adaptiveVsync: 0
     vSyncCount: 0
     realtimeGICPUUsage: 25
+    adaptiveVsyncExtraA: 0
+    adaptiveVsyncExtraB: 0
     lodBias: 0.4
     maximumLODLevel: 0
     enableLODCrossFade: 1
@@ -55,56 +58,7 @@ QualitySettings:
     terrainFadeLength: 5
     terrainMaxTrees: 50
     excludedTargetPlatforms: []
-  - serializedVersion: 3
-    name: High
-    pixelLightCount: 0
-    shadows: 2
-    shadowResolution: 1
-    shadowProjection: 1
-    shadowCascades: 2
-    shadowDistance: 40
-    shadowNearPlaneOffset: 3
-    shadowCascade2Split: 0.33333334
-    shadowCascade4Split: {x: 0.06666667, y: 0.2, z: 0.46666667}
-    shadowmaskMode: 1
-    skinWeights: 2
-    globalTextureMipmapLimit: 0
-    textureMipmapLimitSettings: []
-    anisotropicTextures: 2
-    antiAliasing: 8
-    softParticles: 0
-    softVegetation: 1
-    realtimeReflectionProbes: 0
-    billboardsFaceCameraPosition: 1
-    useLegacyDetailDistribution: 1
-    vSyncCount: 1
-    realtimeGICPUUsage: 50
-    lodBias: 1
-    maximumLODLevel: 0
-    enableLODCrossFade: 1
-    streamingMipmapsActive: 0
-    streamingMipmapsAddAllCameras: 1
-    streamingMipmapsMemoryBudget: 512
-    streamingMipmapsRenderersPerFrame: 512
-    streamingMipmapsMaxLevelReduction: 2
-    streamingMipmapsMaxFileIORequests: 1024
-    particleRaycastBudget: 256
-    asyncUploadTimeSlice: 2
-    asyncUploadBufferSize: 16
-    asyncUploadPersistentBuffer: 1
-    resolutionScalingFixedDPIFactor: 1
-    customRenderPipeline: {fileID: 0}
-    terrainQualityOverrides: 0
-    terrainPixelError: 1
-    terrainDetailDensityScale: 1
-    terrainBasemapDistance: 1000
-    terrainDetailDistance: 80
-    terrainTreeDistance: 5000
-    terrainBillboardStart: 50
-    terrainFadeLength: 5
-    terrainMaxTrees: 50
-    excludedTargetPlatforms: []
-  - serializedVersion: 3
+  - serializedVersion: 4
     name: Medium
     pixelLightCount: 0
     shadows: 1
@@ -126,8 +80,11 @@ QualitySettings:
     realtimeReflectionProbes: 0
     billboardsFaceCameraPosition: 0
     useLegacyDetailDistribution: 1
+    adaptiveVsync: 0
     vSyncCount: 2
     realtimeGICPUUsage: 25
+    adaptiveVsyncExtraA: 0
+    adaptiveVsyncExtraB: 0
     lodBias: 0.7
     maximumLODLevel: 0
     enableLODCrossFade: 1
@@ -138,6 +95,58 @@ QualitySettings:
     streamingMipmapsMaxLevelReduction: 2
     streamingMipmapsMaxFileIORequests: 1024
     particleRaycastBudget: 64
+    asyncUploadTimeSlice: 2
+    asyncUploadBufferSize: 16
+    asyncUploadPersistentBuffer: 1
+    resolutionScalingFixedDPIFactor: 1
+    customRenderPipeline: {fileID: 0}
+    terrainQualityOverrides: 0
+    terrainPixelError: 1
+    terrainDetailDensityScale: 1
+    terrainBasemapDistance: 1000
+    terrainDetailDistance: 80
+    terrainTreeDistance: 5000
+    terrainBillboardStart: 50
+    terrainFadeLength: 5
+    terrainMaxTrees: 50
+    excludedTargetPlatforms: []
+  - serializedVersion: 4
+    name: High
+    pixelLightCount: 0
+    shadows: 2
+    shadowResolution: 1
+    shadowProjection: 1
+    shadowCascades: 2
+    shadowDistance: 40
+    shadowNearPlaneOffset: 3
+    shadowCascade2Split: 0.33333334
+    shadowCascade4Split: {x: 0.06666667, y: 0.2, z: 0.46666667}
+    shadowmaskMode: 1
+    skinWeights: 2
+    globalTextureMipmapLimit: 0
+    textureMipmapLimitSettings: []
+    anisotropicTextures: 2
+    antiAliasing: 8
+    softParticles: 0
+    softVegetation: 1
+    realtimeReflectionProbes: 0
+    billboardsFaceCameraPosition: 1
+    useLegacyDetailDistribution: 1
+    adaptiveVsync: 0
+    vSyncCount: 1
+    realtimeGICPUUsage: 50
+    adaptiveVsyncExtraA: 0
+    adaptiveVsyncExtraB: 0
+    lodBias: 1
+    maximumLODLevel: 0
+    enableLODCrossFade: 1
+    streamingMipmapsActive: 0
+    streamingMipmapsAddAllCameras: 1
+    streamingMipmapsMemoryBudget: 512
+    streamingMipmapsRenderersPerFrame: 512
+    streamingMipmapsMaxLevelReduction: 2
+    streamingMipmapsMaxFileIORequests: 1024
+    particleRaycastBudget: 256
     asyncUploadTimeSlice: 2
     asyncUploadBufferSize: 16
     asyncUploadPersistentBuffer: 1

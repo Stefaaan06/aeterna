@@ -31,6 +31,7 @@ public class playerPauseMenu : MonoBehaviour
     {
         paused = true;
         pauseMenu.SetActive(true);
+        Time.timeScale = 0;
         
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
@@ -42,6 +43,7 @@ public class playerPauseMenu : MonoBehaviour
     {
         paused = false;
         pauseMenu.SetActive(false);
+        Time.timeScale = 1;
         
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
