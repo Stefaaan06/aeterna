@@ -13,7 +13,7 @@ A non-euclidean puzzle-parkour game set in an infinite world.
  ``` bash
 git clone https://github.com/Stefaaan06/aeterna
 ```
-- Open the project using Unity <span style="color:#ff5733;">2022.3.5f1</span>.
+- Open the project using Unity <span style="color:#ff5733;">6</span>.
 - You are good to go!
 
 # Credits
